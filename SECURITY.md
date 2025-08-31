@@ -10,6 +10,7 @@
 
 * 发送电子邮件至以下电子邮件之一:
   * [#](mailto:#)
+* [Security Advisories](https://github.com/NewMaXs/momentum/security/advisories/new)
 
 ### 报告中应包含的内容
 
@@ -44,6 +45,7 @@ To report a vulnerability responsibly, please use the following methods:
 
 * Email us at
   * [#](mailto:#)
+* [Security Advisories](https://github.com/NewMaXs/momentum/security/advisories/new)
 
 ### What to Include in a Report
 
