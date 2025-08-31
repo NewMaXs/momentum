@@ -1,5 +1,7 @@
 # momentum
 
+[![GitHub Stars](https://img.shields.io/github/stars/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/stargazers) [![GitHub Forks](https://img.shields.io/github/forks/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/network/members) [![GitHub Issues](https://img.shields.io/github/issues/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/pulls) [![GitHub last commit](https://img.shields.io/github/last-commit/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/commits/main) [![GitHub license](https://img.shields.io/github/license/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/blob/main/LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/graphs/contributors)
+
 This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
 
 ## Get started
