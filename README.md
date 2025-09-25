@@ -1,45 +1,153 @@
-# momentum
+# Momentum - 自控力管理App
 
-[![GitHub Stars](https://img.shields.io/github/stars/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/stargazers) [![GitHub Forks](https://img.shields.io/github/forks/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/network/members) [![GitHub Issues](https://img.shields.io/github/issues/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/issues) [![GitHub pull requests](https://img.shields.io/github/issues-pr/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/pulls) [![GitHub last commit](https://img.shields.io/github/last-commit/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/commits/main) [![GitHub license](https://img.shields.io/github/license/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/blob/main/LICENSE) [![GitHub contributors](https://img.shields.io/github/contributors/NewMaXs/momentum)](https://github.com/NewMaXs/momentum/graphs/contributors)
+基于知乎文章《我期待这篇文章成为迄今为止（2025年）中文互联网上，在自制力话题下最硬核的技术讨论》开发的自控力管理应用。
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+## 项目概述
 
-## Get started
+Momentum 是一个基于 CTDP（链式时延协议）和 RSIP（递归稳态迭代协议）的自控力管理应用，旨在帮助用户通过科学的方法提升自控力和专注力。
 
-1. Install dependencies
+## 核心功能
 
-   ```bash
-   npm install
-   ```
+### CTDP (链式时延协议)
+- **主链（专注链）**：基于"神圣座位原理"的专注任务链
+- **辅助链（预约链）**：基于"线性时延原理"的预约机制
+- **判例管理**：基于"下必为例"原则的违规处理系统
 
-2. Start the app
+### RSIP (递归稳态迭代协议)
+- **定式树**：可递归管理的自控定式系统
+- **稳态分析**：多维度稳态监控和分析
+- **回溯推荐**：智能回溯到可干预节点
 
-   ```bash
-   npx expo start
-   ```
+## 技术栈
 
-In the output, you'll find options to open the app in a
+- **框架**: React Native + Expo
+- **导航**: Expo Router
+- **UI组件**: 自定义设计系统
+- **状态管理**: React Hooks
+- **图标**: Expo Vector Icons
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## 项目结构
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+momentum/
+├── app/                    # 页面文件
+│   ├── _layout.tsx        # 根布局和导航
+│   ├── index.tsx          # 首页仪表盘
+│   ├── focus.tsx          # 专注界面
+│   ├── patterns.tsx       # 定式树界面
+│   ├── analytics.tsx      # 分析界面
+│   └── settings.tsx       # 设置界面
+├── components/            # 组件库
+│   ├── DesignSystem.tsx   # 设计系统和基础组件
+│   ├── CTDPComponents.tsx # CTDP相关组件
+│   └── RSIPComponents.tsx # RSIP相关组件
+└── assets/               # 静态资源
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## 核心概念
 
-## Learn more
+### 1. 神圣座位原理
+通过指定特定的"神圣座位"（可以是物理位置、应用状态等），建立严格的专注规则。一旦触发，必须保持最佳状态完成专注任务。
 
-To learn more about developing your project with Expo, look at the following resources:
+### 2. 下必为例原则
+当遇到模糊的违规情况时，用户必须在两个选项中选择：
+- 清空整个主链，重新开始
+- 永久允许该行为，建立判例
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+### 3. 线性时延原理
+通过预约机制降低立即开始的阻力。用户可以预约15分钟后开始专注，利用时间平移效应降低启动成本。
+
+### 4. 定式树管理
+将自控策略抽象为可复用的"定式"，通过树形结构管理，支持强化升级和递归回溯。
+
+## 主要界面
+
+### 首页仪表盘
+- 今日自控状态概览
+- 链健康度监控
+- 快速操作入口
+- 风险提示
+
+### 专注界面
+- 实时专注计时器
+- 违规报告和处理
+- 沉没成本可视化
+- 神圣座位原理说明
+
+### 定式树界面
+- 树形定式管理
+- 模板库
+- 定式创建和编辑
+- 强化等级管理
+
+### 分析界面
+- 多维度数据分析
+- 趋势图表
+- 稳态雷达
+- 洞察建议
+
+### 设置界面
+- 应用配置
+- 专注参数设置
+- 自动化选项
+- 数据管理
+
+## 设计原则
+
+1. **离线优先**：核心功能无需网络连接
+2. **隐私友好**：数据本地存储，可选云同步
+3. **无社交压力**：专注于个人自控，无社交功能
+4. **科学严谨**：基于数学和物理原理设计
+
+## 安装和运行
+
+```bash
+# 安装依赖
+npm install
+
+# 启动开发服务器
+npm start
+
+# 运行在Android设备
+npm run android
+
+# 运行在iOS设备
+npm run ios
+```
+
+## 开发说明
+
+### 组件设计
+- 使用统一的设计系统确保UI一致性
+- 组件高度可复用，支持主题定制
+- 响应式设计，适配不同屏幕尺寸
+
+### 状态管理
+- 使用React Hooks进行状态管理
+- 模拟数据展示，便于开发调试
+- 预留数据持久化接口
+
+### 扩展性
+- 模块化设计，易于添加新功能
+- 支持插件化扩展
+- 预留API接口用于数据同步
+
+## 未来规划
+
+1. **数据持久化**：集成本地数据库
+2. **云同步**：可选的数据云端同步
+3. **自动化**：地理位置、NFC、蓝牙触发
+4. **AI推荐**：基于使用数据的智能推荐
+5. **社区功能**：定式模板分享
+
+## 贡献指南
+
+欢迎提交Issue和Pull Request来改进这个项目。
+
+## 许可证
+
+MIT License
+
+## 致谢
+
+感谢知乎用户 @edmond 的原创文章，为这个项目提供了理论基础和设计灵感。
