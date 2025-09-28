@@ -1,53 +1,74 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import { BorderRadius, Button, Card, Colors, FontSizes, Spacing } from '../components/DesignSystem';
-import { Pattern, PatternTemplate, PatternTemplateLibrary, PatternTree, SteadyStateAnalysis } from '../components/RSIPComponents';
+import {
+  BorderRadius,
+  Button,
+  Card,
+  Colors,
+  FontSizes,
+  Spacing,
+} from "@/components/DesignSystem";
+import {
+  Pattern,
+  PatternTemplate,
+  PatternTemplateLibrary,
+  PatternTree,
+  SteadyStateAnalysis,
+} from "@/components/RSIPComponents";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function PatternsScreen() {
   const [patterns, setPatterns] = useState<Pattern[]>([
     {
-      id: 'pattern-1',
-      title: '回家立即洗澡',
-      description: '进家门后15分钟内必须开始洗澡',
-      triggerRule: '地理位置检测到回家',
-      actionRule: '进入浴室开始洗澡流程',
+      id: "pattern-1",
+      title: "回家立即洗澡",
+      description: "进家门后15分钟内必须开始洗澡",
+      triggerRule: "地理位置检测到回家",
+      actionRule: "进入浴室开始洗澡流程",
       level: 0,
       dependencies: [],
       conflicts: [],
       reinforcement: 2,
       isActive: true,
-      createdAt: new Date('2024-01-10'),
+      createdAt: new Date("2024-01-10"),
       lastSuccessAt: new Date(),
       successCount: 15,
     },
     {
-      id: 'pattern-2',
-      title: '不带手机进卧室',
-      description: '晚上睡觉前将手机放在客厅充电',
-      triggerRule: '晚上22:00后',
-      actionRule: '将手机放置在客厅指定位置',
+      id: "pattern-2",
+      title: "不带手机进卧室",
+      description: "晚上睡觉前将手机放在客厅充电",
+      triggerRule: "晚上22:00后",
+      actionRule: "将手机放置在客厅指定位置",
       level: 0,
       dependencies: [],
       conflicts: [],
       reinforcement: 1,
       isActive: true,
-      createdAt: new Date('2024-01-12'),
+      createdAt: new Date("2024-01-12"),
       lastSuccessAt: new Date(),
       successCount: 8,
     },
     {
-      id: 'pattern-3',
-      title: '起床后30分钟不用手机',
-      description: '起床后前30分钟只能做正事，不能刷手机',
-      triggerRule: '早上起床后',
-      actionRule: '将手机放在客厅，进行洗漱、整理、早餐等活动',
+      id: "pattern-3",
+      title: "起床后30分钟不用手机",
+      description: "起床后前30分钟只能做正事，不能刷手机",
+      triggerRule: "早上起床后",
+      actionRule: "将手机放在客厅，进行洗漱、整理、早餐等活动",
       level: 0,
       dependencies: [],
       conflicts: [],
       reinforcement: 0,
       isActive: true,
-      createdAt: new Date('2024-01-15'),
+      createdAt: new Date("2024-01-15"),
       lastSuccessAt: new Date(),
       successCount: 5,
     },
@@ -55,52 +76,52 @@ export default function PatternsScreen() {
 
   const [templates] = useState<PatternTemplate[]>([
     {
-      id: 'template-1',
-      title: '回家立即洗澡',
-      description: '进家门后15分钟内必须开始洗澡',
-      triggerRule: '地理位置检测到回家',
-      actionRule: '进入浴室开始洗澡流程',
-      category: '生活习惯',
+      id: "template-1",
+      title: "回家立即洗澡",
+      description: "进家门后15分钟内必须开始洗澡",
+      triggerRule: "地理位置检测到回家",
+      actionRule: "进入浴室开始洗澡流程",
+      category: "生活习惯",
     },
     {
-      id: 'template-2',
-      title: '不带手机进卧室',
-      description: '晚上睡觉前将手机放在客厅充电',
-      triggerRule: '晚上22:00后',
-      actionRule: '将手机放置在客厅指定位置',
-      category: '数字戒断',
+      id: "template-2",
+      title: "不带手机进卧室",
+      description: "晚上睡觉前将手机放在客厅充电",
+      triggerRule: "晚上22:00后",
+      actionRule: "将手机放置在客厅指定位置",
+      category: "数字戒断",
     },
     {
-      id: 'template-3',
-      title: '起床后30分钟不用手机',
-      description: '起床后前30分钟只能做正事，不能刷手机',
-      triggerRule: '早上起床后',
-      actionRule: '将手机放在客厅，进行洗漱、整理、早餐等活动',
-      category: '数字戒断',
+      id: "template-3",
+      title: "起床后30分钟不用手机",
+      description: "起床后前30分钟只能做正事，不能刷手机",
+      triggerRule: "早上起床后",
+      actionRule: "将手机放在客厅，进行洗漱、整理、早餐等活动",
+      category: "数字戒断",
     },
     {
-      id: 'template-4',
-      title: '饭后立即洗碗',
-      description: '吃完饭后立即洗碗，不拖延',
-      triggerRule: '用餐结束后',
-      actionRule: '立即收拾餐具并清洗',
-      category: '生活习惯',
+      id: "template-4",
+      title: "饭后立即洗碗",
+      description: "吃完饭后立即洗碗，不拖延",
+      triggerRule: "用餐结束后",
+      actionRule: "立即收拾餐具并清洗",
+      category: "生活习惯",
     },
     {
-      id: 'template-5',
-      title: '睡前阅读30分钟',
-      description: '每天晚上睡前阅读30分钟纸质书籍',
-      triggerRule: '晚上21:30后',
-      actionRule: '拿起纸质书籍阅读30分钟',
-      category: '学习成长',
+      id: "template-5",
+      title: "睡前阅读30分钟",
+      description: "每天晚上睡前阅读30分钟纸质书籍",
+      triggerRule: "晚上21:30后",
+      actionRule: "拿起纸质书籍阅读30分钟",
+      category: "学习成长",
     },
     {
-      id: 'template-6',
-      title: '运动前准备',
-      description: '运动前准备好运动装备和水',
-      triggerRule: '计划运动前30分钟',
-      actionRule: '准备运动装备、水杯等必需品',
-      category: '健康管理',
+      id: "template-6",
+      title: "运动前准备",
+      description: "运动前准备好运动装备和水",
+      triggerRule: "计划运动前30分钟",
+      actionRule: "准备运动装备、水杯等必需品",
+      category: "健康管理",
     },
   ]);
 
@@ -114,25 +135,25 @@ export default function PatternsScreen() {
 
   const [showAddPattern, setShowAddPattern] = useState(false);
   const [newPattern, setNewPattern] = useState({
-    title: '',
-    description: '',
-    triggerRule: '',
-    actionRule: '',
+    title: "",
+    description: "",
+    triggerRule: "",
+    actionRule: "",
   });
 
   const handleAddPattern = (parentId?: string) => {
     if (parentId) {
       // 添加子定式
-      Alert.alert('添加子定式', '选择添加方式：', [
+      Alert.alert("添加子定式", "选择添加方式：", [
         {
-          text: '从模板选择',
+          text: "从模板选择",
           onPress: () => setShowAddPattern(true),
         },
         {
-          text: '自定义创建',
+          text: "自定义创建",
           onPress: () => setShowAddPattern(true),
         },
-        { text: '取消', style: 'cancel' },
+        { text: "取消", style: "cancel" },
       ]);
     } else {
       setShowAddPattern(true);
@@ -140,9 +161,12 @@ export default function PatternsScreen() {
   };
 
   const handleRemovePattern = (patternId: string) => {
-    setPatterns(prev => {
-      const removePatternAndChildren = (patterns: Pattern[], id: string): Pattern[] => {
-        return patterns.filter(pattern => {
+    setPatterns((prev) => {
+      const removePatternAndChildren = (
+        patterns: Pattern[],
+        id: string
+      ): Pattern[] => {
+        return patterns.filter((pattern) => {
           if (pattern.id === id || pattern.parentId === id) {
             return false;
           }
@@ -154,19 +178,23 @@ export default function PatternsScreen() {
   };
 
   const handleReinforcePattern = (patternId: string) => {
-    setPatterns(prev => prev.map(pattern => 
-      pattern.id === patternId 
-        ? { ...pattern, reinforcement: pattern.reinforcement + 1 }
-        : pattern
-    ));
+    setPatterns((prev) =>
+      prev.map((pattern) =>
+        pattern.id === patternId
+          ? { ...pattern, reinforcement: pattern.reinforcement + 1 }
+          : pattern
+      )
+    );
   };
 
   const handleTogglePattern = (patternId: string) => {
-    setPatterns(prev => prev.map(pattern => 
-      pattern.id === patternId 
-        ? { ...pattern, isActive: !pattern.isActive }
-        : pattern
-    ));
+    setPatterns((prev) =>
+      prev.map((pattern) =>
+        pattern.id === patternId
+          ? { ...pattern, isActive: !pattern.isActive }
+          : pattern
+      )
+    );
   };
 
   const handleSelectTemplate = (template: PatternTemplate) => {
@@ -185,15 +213,20 @@ export default function PatternsScreen() {
       successCount: 0,
     };
 
-    setPatterns(prev => [...prev, newPattern]);
+    setPatterns((prev) => [...prev, newPattern]);
     setShowAddPattern(false);
-    
-    Alert.alert('定式已添加', `"${template.title}" 已添加到你的定式树中`);
+
+    Alert.alert("定式已添加", `"${template.title}" 已添加到你的定式树中`);
   };
 
   const handleCreateCustomPattern = () => {
-    if (!newPattern.title || !newPattern.description || !newPattern.triggerRule || !newPattern.actionRule) {
-      Alert.alert('信息不完整', '请填写所有必要信息');
+    if (
+      !newPattern.title ||
+      !newPattern.description ||
+      !newPattern.triggerRule ||
+      !newPattern.actionRule
+    ) {
+      Alert.alert("信息不完整", "请填写所有必要信息");
       return;
     }
 
@@ -212,19 +245,24 @@ export default function PatternsScreen() {
       successCount: 0,
     };
 
-    setPatterns(prev => [...prev, customPattern]);
+    setPatterns((prev) => [...prev, customPattern]);
     setShowAddPattern(false);
-    setNewPattern({ title: '', description: '', triggerRule: '', actionRule: '' });
-    
-    Alert.alert('定式已创建', `"${customPattern.title}" 已添加到你的定式树中`);
+    setNewPattern({
+      title: "",
+      description: "",
+      triggerRule: "",
+      actionRule: "",
+    });
+
+    Alert.alert("定式已创建", `"${customPattern.title}" 已添加到你的定式树中`);
   };
 
   const getActivePatternsCount = () => {
-    return patterns.filter(p => p.isActive).length;
+    return patterns.filter((p) => p.isActive).length;
   };
 
   const getReinforcedPatternsCount = () => {
-    return patterns.filter(p => p.reinforcement > 0).length;
+    return patterns.filter((p) => p.reinforcement > 0).length;
   };
 
   return (
@@ -283,7 +321,9 @@ export default function PatternsScreen() {
                 <TextInput
                   style={styles.textInput}
                   value={newPattern.title}
-                  onChangeText={(text) => setNewPattern(prev => ({ ...prev, title: text }))}
+                  onChangeText={(text) =>
+                    setNewPattern((prev) => ({ ...prev, title: text }))
+                  }
                   placeholder="例如：回家立即洗澡"
                 />
               </View>
@@ -293,7 +333,9 @@ export default function PatternsScreen() {
                 <TextInput
                   style={[styles.textInput, styles.textArea]}
                   value={newPattern.description}
-                  onChangeText={(text) => setNewPattern(prev => ({ ...prev, description: text }))}
+                  onChangeText={(text) =>
+                    setNewPattern((prev) => ({ ...prev, description: text }))
+                  }
                   placeholder="详细描述这个定式的目的和意义"
                   multiline
                   numberOfLines={3}
@@ -305,7 +347,9 @@ export default function PatternsScreen() {
                 <TextInput
                   style={[styles.textInput, styles.textArea]}
                   value={newPattern.triggerRule}
-                  onChangeText={(text) => setNewPattern(prev => ({ ...prev, triggerRule: text }))}
+                  onChangeText={(text) =>
+                    setNewPattern((prev) => ({ ...prev, triggerRule: text }))
+                  }
                   placeholder="描述什么情况下触发这个定式"
                   multiline
                   numberOfLines={2}
@@ -317,7 +361,9 @@ export default function PatternsScreen() {
                 <TextInput
                   style={[styles.textInput, styles.textArea]}
                   value={newPattern.actionRule}
-                  onChangeText={(text) => setNewPattern(prev => ({ ...prev, actionRule: text }))}
+                  onChangeText={(text) =>
+                    setNewPattern((prev) => ({ ...prev, actionRule: text }))
+                  }
                   placeholder="描述具体要执行的动作"
                   multiline
                   numberOfLines={2}
@@ -358,20 +404,20 @@ const styles = StyleSheet.create({
   },
   overviewTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
   },
   overviewStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statValue: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.primary,
     marginBottom: Spacing.xs,
   },
@@ -380,30 +426,30 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   modalOverlay: {
-    position: 'absolute',
+    position: "absolute",
     top: 0,
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: "center",
+    alignItems: "center",
     zIndex: 1000,
   },
   modalCard: {
-    width: '90%',
-    maxHeight: '80%',
+    width: "90%",
+    maxHeight: "80%",
     padding: Spacing.lg,
   },
   modalHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.lg,
   },
   modalTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
   },
   modalContent: {
@@ -415,7 +461,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: FontSizes.sm,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -430,16 +476,16 @@ const styles = StyleSheet.create({
   },
   textArea: {
     height: 80,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
   },
   modalActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.md,
   },
   modalButton: {
     flex: 1,
   },
   bottomSpacer: {
-    height: Spacing['2xl'],
+    height: Spacing["2xl"],
   },
 });

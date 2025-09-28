@@ -1,81 +1,100 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { AuxChain, ChainData, MainChain, PrecedentCase, PrecedentManager } from '../components/CTDPComponents';
-import { Badge, Card, Colors, FontSizes, ProgressBar, Spacing } from '../components/DesignSystem';
-import { Pattern, SteadyStateAnalysis } from '../components/RSIPComponents';
+import {
+  AuxChain,
+  ChainData,
+  MainChain,
+  PrecedentCase,
+  PrecedentManager,
+} from "@/components/CTDPComponents";
+import {
+  Badge,
+  Card,
+  Colors,
+  FontSizes,
+  ProgressBar,
+  Spacing,
+} from "@/components/DesignSystem";
+import { Pattern, SteadyStateAnalysis } from "@/components/RSIPComponents";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 export default function Dashboard() {
   // 模拟数据
   const [mainChain, setMainChain] = useState<ChainData>({
-    id: 'main-1',
-    type: 'MAIN',
+    id: "main-1",
+    type: "MAIN",
     currentLength: 12,
     bestLength: 25,
-    status: 'IDLE',
+    status: "IDLE",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
 
   const [auxChain, setAuxChain] = useState<ChainData>({
-    id: 'aux-1',
-    type: 'AUX',
+    id: "aux-1",
+    type: "AUX",
     currentLength: 8,
     bestLength: 15,
-    status: 'IDLE',
+    status: "IDLE",
     createdAt: new Date(),
     updatedAt: new Date(),
   });
 
   const [precedents, setPrecedents] = useState<PrecedentCase[]>([
     {
-      id: 'p1',
-      behaviorKey: '中途上厕所',
+      id: "p1",
+      behaviorKey: "中途上厕所",
       allowed: true,
-      decidedAt: new Date('2024-01-15'),
+      decidedAt: new Date("2024-01-15"),
     },
     {
-      id: 'p2',
-      behaviorKey: '回复重要消息',
+      id: "p2",
+      behaviorKey: "回复重要消息",
       allowed: true,
-      decidedAt: new Date('2024-01-16'),
+      decidedAt: new Date("2024-01-16"),
     },
     {
-      id: 'p3',
-      behaviorKey: '刷短视频',
+      id: "p3",
+      behaviorKey: "刷短视频",
       allowed: false,
-      decidedAt: new Date('2024-01-17'),
+      decidedAt: new Date("2024-01-17"),
     },
   ]);
 
   const [patterns, setPatterns] = useState<Pattern[]>([
     {
-      id: 'pattern-1',
-      title: '回家立即洗澡',
-      description: '进家门后15分钟内必须开始洗澡',
-      triggerRule: '地理位置检测到回家',
-      actionRule: '进入浴室开始洗澡流程',
+      id: "pattern-1",
+      title: "回家立即洗澡",
+      description: "进家门后15分钟内必须开始洗澡",
+      triggerRule: "地理位置检测到回家",
+      actionRule: "进入浴室开始洗澡流程",
       level: 0,
       dependencies: [],
       conflicts: [],
       reinforcement: 2,
       isActive: true,
-      createdAt: new Date('2024-01-10'),
+      createdAt: new Date("2024-01-10"),
       lastSuccessAt: new Date(),
       successCount: 15,
     },
     {
-      id: 'pattern-2',
-      title: '不带手机进卧室',
-      description: '晚上睡觉前将手机放在客厅充电',
-      triggerRule: '晚上22:00后',
-      actionRule: '将手机放置在客厅指定位置',
+      id: "pattern-2",
+      title: "不带手机进卧室",
+      description: "晚上睡觉前将手机放在客厅充电",
+      triggerRule: "晚上22:00后",
+      actionRule: "将手机放置在客厅指定位置",
       level: 0,
       dependencies: [],
       conflicts: [],
       reinforcement: 1,
       isActive: true,
-      createdAt: new Date('2024-01-12'),
+      createdAt: new Date("2024-01-12"),
       lastSuccessAt: new Date(),
       successCount: 8,
     },
@@ -90,36 +109,36 @@ export default function Dashboard() {
   });
 
   const handleMainChainTrigger = () => {
-    setMainChain(prev => ({
+    setMainChain((prev) => ({
       ...prev,
-      status: 'FOCUSING',
+      status: "FOCUSING",
       updatedAt: new Date(),
     }));
   };
 
   const handleMainChainViolation = (behavior: string) => {
-    if (behavior === 'RESET') {
-      setMainChain(prev => ({
+    if (behavior === "RESET") {
+      setMainChain((prev) => ({
         ...prev,
         currentLength: 0,
-        status: 'IDLE',
+        status: "IDLE",
         updatedAt: new Date(),
       }));
     }
   };
 
   const handleAuxSchedule = () => {
-    setAuxChain(prev => ({
+    setAuxChain((prev) => ({
       ...prev,
-      status: 'TRIGGERED',
+      status: "TRIGGERED",
       updatedAt: new Date(),
     }));
   };
 
   const handleAuxTrigger = () => {
-    setAuxChain(prev => ({
+    setAuxChain((prev) => ({
       ...prev,
-      status: 'IDLE',
+      status: "IDLE",
       updatedAt: new Date(),
     }));
     // 同时触发主链
@@ -127,23 +146,31 @@ export default function Dashboard() {
   };
 
   const handleAuxMiss = () => {
-    setAuxChain(prev => ({
+    setAuxChain((prev) => ({
       ...prev,
       currentLength: 0,
-      status: 'IDLE',
+      status: "IDLE",
       updatedAt: new Date(),
     }));
   };
 
   const getTodayProgress = () => {
-    const completedPatterns = patterns.filter(p => p.isActive && p.lastSuccessAt && 
-      p.lastSuccessAt.toDateString() === new Date().toDateString()).length;
-    return Math.round((completedPatterns / patterns.filter(p => p.isActive).length) * 100);
+    const completedPatterns = patterns.filter(
+      (p) =>
+        p.isActive &&
+        p.lastSuccessAt &&
+        p.lastSuccessAt.toDateString() === new Date().toDateString()
+    ).length;
+    return Math.round(
+      (completedPatterns / patterns.filter((p) => p.isActive).length) * 100
+    );
   };
 
   const getChainHealth = () => {
-    const mainHealth = (mainChain.currentLength / Math.max(mainChain.bestLength, 1)) * 100;
-    const auxHealth = (auxChain.currentLength / Math.max(auxChain.bestLength, 1)) * 100;
+    const mainHealth =
+      (mainChain.currentLength / Math.max(mainChain.bestLength, 1)) * 100;
+    const auxHealth =
+      (auxChain.currentLength / Math.max(auxChain.bestLength, 1)) * 100;
     return Math.round((mainHealth + auxHealth) / 2);
   };
 
@@ -153,11 +180,11 @@ export default function Dashboard() {
       <View style={styles.welcomeSection}>
         <Text style={styles.welcomeTitle}>今日自控状态</Text>
         <Text style={styles.welcomeSubtitle}>
-          {new Date().toLocaleDateString('zh-CN', { 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric',
-            weekday: 'long'
+          {new Date().toLocaleDateString("zh-CN", {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+            weekday: "long",
           })}
         </Text>
       </View>
@@ -171,7 +198,7 @@ export default function Dashboard() {
             <Text style={styles.metricLabel}>今日完成度</Text>
           </View>
         </Card>
-        
+
         <Card style={styles.metricCard}>
           <View style={styles.metricContent}>
             <Ionicons name="link" size={24} color={Colors.secondary} />
@@ -189,19 +216,31 @@ export default function Dashboard() {
             <Ionicons name="timer-outline" size={24} color={Colors.primary} />
             <Text style={styles.quickActionText}>预约专注</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity style={styles.quickAction}>
-            <Ionicons name="add-circle-outline" size={24} color={Colors.secondary} />
+            <Ionicons
+              name="add-circle-outline"
+              size={24}
+              color={Colors.secondary}
+            />
             <Text style={styles.quickActionText}>添加定式</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity style={styles.quickAction}>
-            <Ionicons name="analytics-outline" size={24} color={Colors.warning} />
+            <Ionicons
+              name="analytics-outline"
+              size={24}
+              color={Colors.warning}
+            />
             <Text style={styles.quickActionText}>查看分析</Text>
           </TouchableOpacity>
-          
+
           <TouchableOpacity style={styles.quickAction}>
-            <Ionicons name="settings-outline" size={24} color={Colors.gray500} />
+            <Ionicons
+              name="settings-outline"
+              size={24}
+              color={Colors.gray500}
+            />
             <Text style={styles.quickActionText}>设置</Text>
           </TouchableOpacity>
         </View>
@@ -232,7 +271,7 @@ export default function Dashboard() {
             allowed,
             decidedAt: new Date(),
           };
-          setPrecedents(prev => [...prev, newPrecedent]);
+          setPrecedents((prev) => [...prev, newPrecedent]);
         }}
       />
 
@@ -240,24 +279,29 @@ export default function Dashboard() {
       <Card style={styles.patternsCard}>
         <Text style={styles.sectionTitle}>今日定式进度</Text>
         <View style={styles.patternsList}>
-          {patterns.filter(p => p.isActive).map((pattern) => (
-            <View key={pattern.id} style={styles.patternItem}>
-              <View style={styles.patternInfo}>
-                <Text style={styles.patternTitle}>{pattern.title}</Text>
-                <Text style={styles.patternDescription}>{pattern.description}</Text>
+          {patterns
+            .filter((p) => p.isActive)
+            .map((pattern) => (
+              <View key={pattern.id} style={styles.patternItem}>
+                <View style={styles.patternInfo}>
+                  <Text style={styles.patternTitle}>{pattern.title}</Text>
+                  <Text style={styles.patternDescription}>
+                    {pattern.description}
+                  </Text>
+                </View>
+                <View style={styles.patternStatus}>
+                  {pattern.lastSuccessAt &&
+                  pattern.lastSuccessAt.toDateString() ===
+                    new Date().toDateString() ? (
+                    <Badge text="已完成" variant="success" size="sm" />
+                  ) : (
+                    <Badge text="待完成" variant="secondary" size="sm" />
+                  )}
+                </View>
               </View>
-              <View style={styles.patternStatus}>
-                {pattern.lastSuccessAt && 
-                 pattern.lastSuccessAt.toDateString() === new Date().toDateString() ? (
-                  <Badge text="已完成" variant="success" size="sm" />
-                ) : (
-                  <Badge text="待完成" variant="secondary" size="sm" />
-                )}
-              </View>
-            </View>
-          ))}
+            ))}
         </View>
-        <ProgressBar 
+        <ProgressBar
           progress={getTodayProgress()}
           style={styles.patternsProgress}
         />
@@ -274,7 +318,9 @@ export default function Dashboard() {
         </View>
         <View style={styles.riskList}>
           <View style={styles.riskItem}>
-            <Text style={styles.riskText}>• 主链已连续12次成功，注意避免破窗效应</Text>
+            <Text style={styles.riskText}>
+              • 主链已连续12次成功，注意避免破窗效应
+            </Text>
           </View>
           <View style={styles.riskItem}>
             <Text style={styles.riskText}>• 手机使用时间较昨日增加15%</Text>
@@ -300,8 +346,8 @@ const styles = StyleSheet.create({
     paddingBottom: Spacing.md,
   },
   welcomeTitle: {
-    fontSize: FontSizes['2xl'],
-    fontWeight: '700',
+    fontSize: FontSizes["2xl"],
+    fontWeight: "700",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -310,7 +356,7 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   metricsRow: {
-    flexDirection: 'row',
+    flexDirection: "row",
     paddingHorizontal: Spacing.lg,
     gap: Spacing.md,
     marginBottom: Spacing.lg,
@@ -320,11 +366,11 @@ const styles = StyleSheet.create({
     padding: Spacing.md,
   },
   metricContent: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   metricValue: {
-    fontSize: FontSizes['2xl'],
-    fontWeight: '700',
+    fontSize: FontSizes["2xl"],
+    fontWeight: "700",
     color: Colors.textPrimary,
     marginTop: Spacing.sm,
     marginBottom: Spacing.xs,
@@ -339,16 +385,16 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
   },
   quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   quickAction: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: Spacing.sm,
   },
   quickActionText: {
@@ -364,9 +410,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
   },
   patternItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     paddingVertical: Spacing.sm,
     borderBottomWidth: 1,
     borderBottomColor: Colors.gray200,
@@ -376,7 +422,7 @@ const styles = StyleSheet.create({
   },
   patternTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -396,14 +442,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warningLight,
   },
   riskHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: Spacing.md,
     gap: Spacing.sm,
   },
   riskTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.warning,
   },
   riskList: {
@@ -418,6 +464,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   bottomSpacer: {
-    height: Spacing['2xl'],
+    height: Spacing["2xl"],
   },
 });

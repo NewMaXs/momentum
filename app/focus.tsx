@@ -1,7 +1,15 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Badge, BorderRadius, Button, Card, Colors, FontSizes, Spacing } from '../components/DesignSystem';
+import {
+  Badge,
+  BorderRadius,
+  Button,
+  Card,
+  Colors,
+  FontSizes,
+  Spacing,
+} from "@/components/DesignSystem";
+import { Ionicons } from "@expo/vector-icons";
+import React, { useEffect, useState } from "react";
+import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 
 export default function FocusScreen() {
   const [isFocusing, setIsFocusing] = useState(false);
@@ -11,11 +19,11 @@ export default function FocusScreen() {
   const [currentChainLength, setCurrentChainLength] = useState(12);
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
-    
+    let interval: ReturnType<typeof setInterval>;
+
     if (isFocusing) {
       interval = setInterval(() => {
-        setFocusTime(prev => {
+        setFocusTime((prev) => {
           const newTime = prev + 1;
           // 如果达到目标时间，自动完成
           if (newTime >= targetTime) {
@@ -36,11 +44,13 @@ export default function FocusScreen() {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const secs = seconds % 60;
-    
+
     if (hours > 0) {
-      return `${hours}:${minutes.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+      return `${hours}:${minutes.toString().padStart(2, "0")}:${secs
+        .toString()
+        .padStart(2, "0")}`;
     }
-    return `${minutes}:${secs.toString().padStart(2, '0')}`;
+    return `${minutes}:${secs.toString().padStart(2, "0")}`;
   };
 
   const getProgress = () => {
@@ -63,77 +73,78 @@ export default function FocusScreen() {
 
   const handleCompleteFocus = () => {
     setIsFocusing(false);
-    setCurrentChainLength(prev => prev + 1);
-    
+    setCurrentChainLength((prev) => prev + 1);
+
     Alert.alert(
-      '专注完成！',
-      `恭喜你完成了 ${formatTime(focusTime)} 的专注时间！\n\n链长度已更新为 #${currentChainLength + 1}`,
+      "专注完成！",
+      `恭喜你完成了 ${formatTime(focusTime)} 的专注时间！\n\n链长度已更新为 #${
+        currentChainLength + 1
+      }`,
       [
         {
-          text: '继续专注',
+          text: "继续专注",
           onPress: () => {
             setFocusTime(0);
             setIsFocusing(true);
           },
         },
         {
-          text: '结束',
-          style: 'default',
+          text: "结束",
+          style: "default",
         },
       ]
     );
   };
 
   const handleReportViolation = () => {
-    Alert.alert(
-      '报告违规行为',
-      '请选择你刚才的行为：',
-      [
-        {
-          text: '上厕所',
-          onPress: () => handleViolationDecision('上厕所'),
-        },
-        {
-          text: '回复消息',
-          onPress: () => handleViolationDecision('回复消息'),
-        },
-        {
-          text: '刷手机',
-          onPress: () => handleViolationDecision('刷手机'),
-        },
-        {
-          text: '其他',
-          onPress: () => handleViolationDecision('其他行为'),
-        },
-        {
-          text: '取消',
-          style: 'cancel',
-        },
-      ]
-    );
+    Alert.alert("报告违规行为", "请选择你刚才的行为：", [
+      {
+        text: "上厕所",
+        onPress: () => handleViolationDecision("上厕所"),
+      },
+      {
+        text: "回复消息",
+        onPress: () => handleViolationDecision("回复消息"),
+      },
+      {
+        text: "刷手机",
+        onPress: () => handleViolationDecision("刷手机"),
+      },
+      {
+        text: "其他",
+        onPress: () => handleViolationDecision("其他行为"),
+      },
+      {
+        text: "取消",
+        style: "cancel",
+      },
+    ]);
   };
 
   const handleViolationDecision = (behavior: string) => {
     Alert.alert(
-      '下必为例',
+      "下必为例",
       `检测到行为："${behavior}"\n\n根据"下必为例"原则，请选择：`,
       [
         {
-          text: '清空主链',
-          style: 'destructive',
+          text: "清空主链",
+          style: "destructive",
           onPress: () => {
-            setViolations(prev => [...prev, behavior]);
+            setViolations((prev) => [...prev, behavior]);
             setCurrentChainLength(0);
             setIsFocusing(false);
-            Alert.alert('主链已清空', '所有节点记录已重置，下次从 #1 重新开始');
+            Alert.alert("主链已清空", "所有节点记录已重置，下次从 #1 重新开始");
           },
         },
         {
-          text: '永久允许',
-          style: 'default',
+          text: "永久允许",
+          style: "default",
           onPress: () => {
-            setViolations(prev => [...prev, behavior]);
-            Alert.alert('行为已允许', `"${behavior}" 已被永久允许，后续不再视为违规`);
+            setViolations((prev) => [...prev, behavior]);
+            Alert.alert(
+              "行为已允许",
+              `"${behavior}" 已被永久允许，后续不再视为违规`
+            );
           },
         },
       ]
@@ -142,18 +153,18 @@ export default function FocusScreen() {
 
   const handleAbandonFocus = () => {
     const sunkCost = currentChainLength;
-    
+
     Alert.alert(
-      '放弃专注',
+      "放弃专注",
       `确定要放弃当前专注吗？\n\n这将损失：\n• ${sunkCost} 个节点的沉没成本\n• 未来约束力的预期价值\n• 整个任务链的连续性`,
       [
         {
-          text: '继续专注',
-          style: 'cancel',
+          text: "继续专注",
+          style: "cancel",
         },
         {
-          text: '确认放弃',
-          style: 'destructive',
+          text: "确认放弃",
+          style: "destructive",
           onPress: () => {
             setCurrentChainLength(0);
             setIsFocusing(false);
@@ -178,9 +189,9 @@ export default function FocusScreen() {
       <Card style={styles.focusCard}>
         <View style={styles.focusHeader}>
           <Text style={styles.focusTitle}>神圣座位</Text>
-          <Badge 
-            text={isFocusing ? '专注中' : '待开始'} 
-            variant={isFocusing ? 'success' : 'secondary'}
+          <Badge
+            text={isFocusing ? "专注中" : "待开始"}
+            variant={isFocusing ? "success" : "secondary"}
           />
         </View>
 
@@ -189,27 +200,23 @@ export default function FocusScreen() {
           <Text style={[styles.timeText, { color: getTimeColor() }]}>
             {formatTime(focusTime)}
           </Text>
-          <Text style={styles.timeLabel}>
-            / {formatTime(targetTime)}
-          </Text>
+          <Text style={styles.timeLabel}>/ {formatTime(targetTime)}</Text>
         </View>
 
         {/* 进度条 */}
         <View style={styles.progressContainer}>
           <View style={styles.progressBar}>
-            <View 
+            <View
               style={[
-                styles.progressFill, 
-                { 
+                styles.progressFill,
+                {
                   width: `${getProgress()}%`,
                   backgroundColor: getTimeColor(),
-                }
-              ]} 
+                },
+              ]}
             />
           </View>
-          <Text style={styles.progressText}>
-            {Math.round(getProgress())}%
-          </Text>
+          <Text style={styles.progressText}>{Math.round(getProgress())}%</Text>
         </View>
 
         {/* 链信息 */}
@@ -228,7 +235,7 @@ export default function FocusScreen() {
       {/* 控制按钮 */}
       <Card style={styles.controlsCard}>
         <Text style={styles.sectionTitle}>专注控制</Text>
-        
+
         {!isFocusing ? (
           <View style={styles.controlButtons}>
             <Button
@@ -241,11 +248,11 @@ export default function FocusScreen() {
             <Button
               title="设置时长"
               onPress={() => {
-                Alert.alert('设置专注时长', '选择专注时长：', [
-                  { text: '30分钟', onPress: () => setTargetTime(30 * 60) },
-                  { text: '60分钟', onPress: () => setTargetTime(60 * 60) },
-                  { text: '90分钟', onPress: () => setTargetTime(90 * 60) },
-                  { text: '取消', style: 'cancel' },
+                Alert.alert("设置专注时长", "选择专注时长：", [
+                  { text: "30分钟", onPress: () => setTargetTime(30 * 60) },
+                  { text: "60分钟", onPress: () => setTargetTime(60 * 60) },
+                  { text: "90分钟", onPress: () => setTargetTime(90 * 60) },
+                  { text: "取消", style: "cancel" },
                 ]);
               }}
               variant="outline"
@@ -302,7 +309,11 @@ export default function FocusScreen() {
           </View>
         ) : (
           <View style={styles.noViolations}>
-            <Ionicons name="checkmark-circle" size={24} color={Colors.success} />
+            <Ionicons
+              name="checkmark-circle"
+              size={24}
+              color={Colors.success}
+            />
             <Text style={styles.noViolationsText}>暂无违规行为</Text>
           </View>
         )}
@@ -325,7 +336,11 @@ export default function FocusScreen() {
             </Text>
           </View>
           <View style={styles.explanationItem}>
-            <Ionicons name="shield-checkmark" size={20} color={Colors.success} />
+            <Ionicons
+              name="shield-checkmark"
+              size={20}
+              color={Colors.success}
+            />
             <Text style={styles.explanationText}>
               沉没成本保护：放弃将损失所有已积累的节点价值
             </Text>
@@ -360,27 +375,27 @@ const styles = StyleSheet.create({
   focusCard: {
     margin: Spacing.lg,
     padding: Spacing.xl,
-    alignItems: 'center',
+    alignItems: "center",
   },
   focusHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    width: "100%",
     marginBottom: Spacing.lg,
   },
   focusTitle: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.textPrimary,
   },
   timeContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: Spacing.lg,
   },
   timeText: {
-    fontSize: FontSizes['4xl'],
-    fontWeight: '700',
+    fontSize: FontSizes["4xl"],
+    fontWeight: "700",
     marginBottom: Spacing.xs,
   },
   timeLabel: {
@@ -388,39 +403,39 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   progressContainer: {
-    width: '100%',
+    width: "100%",
     marginBottom: Spacing.lg,
   },
   progressBar: {
     height: 12,
     backgroundColor: Colors.gray200,
     borderRadius: BorderRadius.full,
-    overflow: 'hidden',
+    overflow: "hidden",
     marginBottom: Spacing.sm,
   },
   progressFill: {
-    height: '100%',
+    height: "100%",
     borderRadius: BorderRadius.full,
   },
   progressText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: FontSizes.sm,
     color: Colors.textSecondary,
   },
   chainInfo: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    width: '100%',
+    flexDirection: "row",
+    justifyContent: "space-around",
+    width: "100%",
     paddingTop: Spacing.lg,
     borderTopWidth: 1,
     borderTopColor: Colors.gray200,
   },
   chainStat: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   chainValue: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.primary,
     marginBottom: Spacing.xs,
   },
@@ -434,7 +449,7 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
   },
@@ -461,17 +476,17 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   violationHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.md,
   },
   violationList: {
     gap: Spacing.sm,
   },
   violationItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: Spacing.sm,
     backgroundColor: Colors.warningLight,
     borderRadius: BorderRadius.md,
@@ -487,7 +502,7 @@ const styles = StyleSheet.create({
     color: Colors.textTertiary,
   },
   noViolations: {
-    alignItems: 'center',
+    alignItems: "center",
     padding: Spacing.lg,
   },
   noViolationsText: {
@@ -503,8 +518,8 @@ const styles = StyleSheet.create({
     gap: Spacing.md,
   },
   explanationItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
+    flexDirection: "row",
+    alignItems: "flex-start",
     gap: Spacing.sm,
   },
   explanationText: {
@@ -519,14 +534,14 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.warningLight,
   },
   riskHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: Spacing.md,
     gap: Spacing.sm,
   },
   riskTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.warning,
   },
   riskText: {
@@ -535,6 +550,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   bottomSpacer: {
-    height: Spacing['2xl'],
+    height: Spacing["2xl"],
   },
 });

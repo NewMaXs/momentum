@@ -1,7 +1,23 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Badge, BorderRadius, Button, Card, Colors, FontSizes, Shadows, Spacing } from './DesignSystem';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import {
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import {
+  Badge,
+  BorderRadius,
+  Button,
+  Card,
+  Colors,
+  FontSizes,
+  Shadows,
+  Spacing,
+} from "./DesignSystem";
 
 // 定式类型定义
 export interface Pattern {
@@ -45,13 +61,13 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
 
   const handleRemove = () => {
     Alert.alert(
-      '删除定式',
+      "删除定式",
       `确定要删除定式"${pattern.title}"及其所有子定式吗？`,
       [
-        { text: '取消', style: 'cancel' },
+        { text: "取消", style: "cancel" },
         {
-          text: '删除',
-          style: 'destructive',
+          text: "删除",
+          style: "destructive",
           onPress: () => onRemove(pattern.id),
         },
       ]
@@ -95,10 +111,10 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
               )}
             </View>
           </View>
-          
+
           <View style={styles.nodeActions}>
             <Ionicons
-              name={isExpanded ? 'chevron-up' : 'chevron-down'}
+              name={isExpanded ? "chevron-up" : "chevron-down"}
               size={20}
               color={Colors.gray500}
             />
@@ -111,7 +127,7 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
               <Text style={styles.ruleTitle}>触发条件</Text>
               <Text style={styles.ruleText}>{pattern.triggerRule}</Text>
             </View>
-            
+
             <View style={styles.ruleSection}>
               <Text style={styles.ruleTitle}>执行动作</Text>
               <Text style={styles.ruleText}>{pattern.actionRule}</Text>
@@ -125,7 +141,7 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
                 size="sm"
                 style={styles.controlButton}
               />
-              
+
               <Button
                 title="强化 +1"
                 onPress={() => onReinforce(pattern.id)}
@@ -133,15 +149,15 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
                 size="sm"
                 style={styles.controlButton}
               />
-              
+
               <Button
-                title={pattern.isActive ? '停用' : '启用'}
+                title={pattern.isActive ? "停用" : "启用"}
                 onPress={() => onToggle(pattern.id)}
-                variant={pattern.isActive ? 'danger' : 'primary'}
+                variant={pattern.isActive ? "danger" : "primary"}
                 size="sm"
                 style={styles.controlButton}
               />
-              
+
               <Button
                 title="删除"
                 onPress={handleRemove}
@@ -191,11 +207,13 @@ export const PatternTree: React.FC<PatternTreeProps> = ({
   onTogglePattern,
 }) => {
   // 构建树形结构
-  const buildTree = (patterns: Pattern[]): { root: Pattern[], children: Record<string, Pattern[]> } => {
+  const buildTree = (
+    patterns: Pattern[]
+  ): { root: Pattern[]; children: Record<string, Pattern[]> } => {
     const root: Pattern[] = [];
     const children: Record<string, Pattern[]> = {};
 
-    patterns.forEach(pattern => {
+    patterns.forEach((pattern) => {
       if (!pattern.parentId) {
         root.push(pattern);
       } else {
@@ -220,10 +238,17 @@ export const PatternTree: React.FC<PatternTreeProps> = ({
         </Text>
       </View>
 
-      <ScrollView style={styles.treeContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.treeContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {root.length === 0 ? (
           <View style={styles.emptyState}>
-            <Ionicons name="git-network-outline" size={48} color={Colors.gray400} />
+            <Ionicons
+              name="git-network-outline"
+              size={48}
+              color={Colors.gray400}
+            />
             <Text style={styles.emptyTitle}>还没有定式</Text>
             <Text style={styles.emptyDescription}>
               添加你的第一个定式，开始构建你的自控系统
@@ -268,7 +293,7 @@ export const PatternTree: React.FC<PatternTreeProps> = ({
 };
 
 // 定式模板组件
-interface PatternTemplate {
+export interface PatternTemplate {
   id: string;
   title: string;
   description: string;
@@ -286,21 +311,22 @@ export const PatternTemplateLibrary: React.FC<PatternTemplateLibraryProps> = ({
   templates,
   onSelectTemplate,
 }) => {
-  const categories = Array.from(new Set(templates.map(t => t.category)));
+  const categories = Array.from(new Set(templates.map((t) => t.category)));
 
   return (
     <Card style={styles.templateCard}>
       <Text style={styles.templateTitle}>定式模板库</Text>
-      <Text style={styles.templateSubtitle}>
-        选择预设模板快速创建定式
-      </Text>
+      <Text style={styles.templateSubtitle}>选择预设模板快速创建定式</Text>
 
-      <ScrollView style={styles.templateContainer} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.templateContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {categories.map((category) => (
           <View key={category} style={styles.categorySection}>
             <Text style={styles.categoryTitle}>{category}</Text>
             {templates
-              .filter(t => t.category === category)
+              .filter((t) => t.category === category)
               .map((template) => (
                 <TouchableOpacity
                   key={template.id}
@@ -308,12 +334,18 @@ export const PatternTemplateLibrary: React.FC<PatternTemplateLibraryProps> = ({
                   onPress={() => onSelectTemplate(template)}
                 >
                   <View style={styles.templateInfo}>
-                    <Text style={styles.templateItemTitle}>{template.title}</Text>
+                    <Text style={styles.templateItemTitle}>
+                      {template.title}
+                    </Text>
                     <Text style={styles.templateItemDescription}>
                       {template.description}
                     </Text>
                   </View>
-                  <Ionicons name="chevron-forward" size={20} color={Colors.gray400} />
+                  <Ionicons
+                    name="chevron-forward"
+                    size={20}
+                    color={Colors.gray400}
+                  />
                 </TouchableOpacity>
               ))}
           </View>
@@ -339,13 +371,13 @@ export const SteadyStateAnalysis: React.FC<SteadyStateAnalysisProps> = ({
   patterns,
   metrics,
 }) => {
-  const activePatterns = patterns.filter(p => p.isActive);
-  const reinforcedPatterns = patterns.filter(p => p.reinforcement > 0);
+  const activePatterns = patterns.filter((p) => p.isActive);
+  const reinforcedPatterns = patterns.filter((p) => p.reinforcement > 0);
 
   return (
     <Card style={styles.analysisCard}>
       <Text style={styles.analysisTitle}>稳态分析</Text>
-      
+
       <View style={styles.metricsGrid}>
         <View style={styles.metricItem}>
           <Text style={styles.metricValue}>{activePatterns.length}</Text>
@@ -357,7 +389,10 @@ export const SteadyStateAnalysis: React.FC<SteadyStateAnalysisProps> = ({
         </View>
         <View style={styles.metricItem}>
           <Text style={styles.metricValue}>
-            {Math.round((activePatterns.length / Math.max(patterns.length, 1)) * 100)}%
+            {Math.round(
+              (activePatterns.length / Math.max(patterns.length, 1)) * 100
+            )}
+            %
           </Text>
           <Text style={styles.metricLabel}>激活率</Text>
         </View>
@@ -369,31 +404,47 @@ export const SteadyStateAnalysis: React.FC<SteadyStateAnalysisProps> = ({
           <View style={styles.radarItem}>
             <Text style={styles.radarLabel}>睡眠</Text>
             <View style={styles.radarBar}>
-              <View style={[styles.radarFill, { width: `${metrics.sleepScore}%` }]} />
+              <View
+                style={[styles.radarFill, { width: `${metrics.sleepScore}%` }]}
+              />
             </View>
           </View>
           <View style={styles.radarItem}>
             <Text style={styles.radarLabel}>精力</Text>
             <View style={styles.radarBar}>
-              <View style={[styles.radarFill, { width: `${metrics.energyScore}%` }]} />
+              <View
+                style={[styles.radarFill, { width: `${metrics.energyScore}%` }]}
+              />
             </View>
           </View>
           <View style={styles.radarItem}>
             <Text style={styles.radarLabel}>手机使用</Text>
             <View style={styles.radarBar}>
-              <View style={[styles.radarFill, { width: `${100 - metrics.phoneUsage}%` }]} />
+              <View
+                style={[
+                  styles.radarFill,
+                  { width: `${100 - metrics.phoneUsage}%` },
+                ]}
+              />
             </View>
           </View>
           <View style={styles.radarItem}>
             <Text style={styles.radarLabel}>任务进度</Text>
             <View style={styles.radarBar}>
-              <View style={[styles.radarFill, { width: `${metrics.taskProgress}%` }]} />
+              <View
+                style={[
+                  styles.radarFill,
+                  { width: `${metrics.taskProgress}%` },
+                ]}
+              />
             </View>
           </View>
           <View style={styles.radarItem}>
             <Text style={styles.radarLabel}>情绪</Text>
             <View style={styles.radarBar}>
-              <View style={[styles.radarFill, { width: `${metrics.moodScore}%` }]} />
+              <View
+                style={[styles.radarFill, { width: `${metrics.moodScore}%` }]}
+              />
             </View>
           </View>
         </View>
@@ -411,7 +462,7 @@ const styles = StyleSheet.create({
   },
   treeTitle: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -434,22 +485,22 @@ const styles = StyleSheet.create({
     ...Shadows.sm,
   },
   nodeHeader: {
-    flexDirection: 'row',
+    flexDirection: "row",
     padding: Spacing.md,
-    alignItems: 'flex-start',
+    alignItems: "flex-start",
   },
   nodeInfo: {
     flex: 1,
   },
   nodeTitleRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.sm,
     marginBottom: Spacing.xs,
   },
   nodeTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
   },
   nodeDescription: {
@@ -458,7 +509,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   nodeStats: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.md,
   },
   nodeStat: {
@@ -479,7 +530,7 @@ const styles = StyleSheet.create({
   },
   ruleTitle: {
     fontSize: FontSizes.sm,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -489,8 +540,8 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
   nodeControls: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: "row",
+    flexWrap: "wrap",
     gap: Spacing.sm,
   },
   controlButton: {
@@ -501,12 +552,12 @@ const styles = StyleSheet.create({
     marginTop: Spacing.sm,
   },
   emptyState: {
-    alignItems: 'center',
-    padding: Spacing['2xl'],
+    alignItems: "center",
+    padding: Spacing["2xl"],
   },
   emptyTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginTop: Spacing.md,
     marginBottom: Spacing.sm,
@@ -514,7 +565,7 @@ const styles = StyleSheet.create({
   emptyDescription: {
     fontSize: FontSizes.sm,
     color: Colors.textSecondary,
-    textAlign: 'center',
+    textAlign: "center",
     marginBottom: Spacing.lg,
   },
   addRootButton: {
@@ -533,7 +584,7 @@ const styles = StyleSheet.create({
   },
   templateTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -550,13 +601,13 @@ const styles = StyleSheet.create({
   },
   categoryTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.sm,
   },
   templateItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: Spacing.md,
     backgroundColor: Colors.backgroundSecondary,
     borderRadius: BorderRadius.md,
@@ -567,7 +618,7 @@ const styles = StyleSheet.create({
   },
   templateItemTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '500',
+    fontWeight: "500",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -580,24 +631,24 @@ const styles = StyleSheet.create({
   },
   analysisTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
   },
   metricsGrid: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: Spacing.lg,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.backgroundSecondary,
     borderRadius: BorderRadius.md,
   },
   metricItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   metricValue: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.primary,
     marginBottom: Spacing.xs,
   },
@@ -610,7 +661,7 @@ const styles = StyleSheet.create({
   },
   radarTitle: {
     fontSize: FontSizes.base,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.md,
   },
@@ -618,8 +669,8 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   radarItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     gap: Spacing.md,
   },
   radarLabel: {
@@ -632,10 +683,10 @@ const styles = StyleSheet.create({
     height: 8,
     backgroundColor: Colors.gray200,
     borderRadius: BorderRadius.full,
-    overflow: 'hidden',
+    overflow: "hidden",
   },
   radarFill: {
-    height: '100%',
+    height: "100%",
     backgroundColor: Colors.primary,
     borderRadius: BorderRadius.full,
   },

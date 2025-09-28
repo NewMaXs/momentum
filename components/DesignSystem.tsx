@@ -1,42 +1,42 @@
-import React from 'react';
-import { StyleSheet, Text, TextStyle, View, ViewStyle } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, TextStyle, View, ViewStyle } from "react-native";
 
 // 设计系统颜色
 export const Colors = {
-  primary: '#6366f1',
-  primaryLight: '#a5b4fc',
-  primaryDark: '#4338ca',
-  secondary: '#10b981',
-  secondaryLight: '#6ee7b7',
-  danger: '#ef4444',
-  dangerLight: '#fca5a5',
-  warning: '#f59e0b',
-  warningLight: '#fcd34d',
-  success: '#10b981',
-  successLight: '#6ee7b7',
-  
+  primary: "#6366f1",
+  primaryLight: "#a5b4fc",
+  primaryDark: "#4338ca",
+  secondary: "#10b981",
+  secondaryLight: "#6ee7b7",
+  danger: "#ef4444",
+  dangerLight: "#fca5a5",
+  warning: "#f59e0b",
+  warningLight: "#fcd34d",
+  success: "#10b981",
+  successLight: "#6ee7b7",
+
   // 中性色
-  gray50: '#f9fafb',
-  gray100: '#f3f4f6',
-  gray200: '#e5e7eb',
-  gray300: '#d1d5db',
-  gray400: '#9ca3af',
-  gray500: '#6b7280',
-  gray600: '#4b5563',
-  gray700: '#374151',
-  gray800: '#1f2937',
-  gray900: '#111827',
-  
+  gray50: "#f9fafb",
+  gray100: "#f3f4f6",
+  gray200: "#e5e7eb",
+  gray300: "#d1d5db",
+  gray400: "#9ca3af",
+  gray500: "#6b7280",
+  gray600: "#4b5563",
+  gray700: "#374151",
+  gray800: "#1f2937",
+  gray900: "#111827",
+
   // 背景色
-  background: '#ffffff',
-  backgroundSecondary: '#f9fafb',
-  backgroundTertiary: '#f3f4f6',
-  
+  background: "#ffffff",
+  backgroundSecondary: "#f9fafb",
+  backgroundTertiary: "#f3f4f6",
+
   // 文本色
-  textPrimary: '#111827',
-  textSecondary: '#6b7280',
-  textTertiary: '#9ca3af',
-  textInverse: '#ffffff',
+  textPrimary: "#111827",
+  textSecondary: "#6b7280",
+  textTertiary: "#9ca3af",
+  textInverse: "#ffffff",
 };
 
 // 字体大小
@@ -46,9 +46,9 @@ export const FontSizes = {
   base: 16,
   lg: 18,
   xl: 20,
-  '2xl': 24,
-  '3xl': 30,
-  '4xl': 36,
+  "2xl": 24,
+  "3xl": 30,
+  "4xl": 36,
 };
 
 // 间距
@@ -58,8 +58,8 @@ export const Spacing = {
   md: 16,
   lg: 24,
   xl: 32,
-  '2xl': 48,
-  '3xl': 64,
+  "2xl": 48,
+  "3xl": 64,
 };
 
 // 圆角
@@ -68,28 +68,28 @@ export const BorderRadius = {
   md: 8,
   lg: 12,
   xl: 16,
-  '2xl': 24,
+  "2xl": 24,
   full: 9999,
 };
 
 // 阴影
 export const Shadows = {
   sm: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.05,
     shadowRadius: 2,
     elevation: 1,
   },
   md: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 3,
   },
   lg: {
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.15,
     shadowRadius: 8,
@@ -101,8 +101,14 @@ export const Shadows = {
 interface ButtonProps {
   title: string;
   onPress: () => void;
-  variant?: 'primary' | 'secondary' | 'danger' | 'outline';
-  size?: 'sm' | 'md' | 'lg';
+  variant?:
+    | "primary"
+    | "secondary"
+    | "danger"
+    | "success"
+    | "warning"
+    | "outline";
+  size?: "sm" | "md" | "lg";
   disabled?: boolean;
   style?: ViewStyle;
 }
@@ -110,24 +116,36 @@ interface ButtonProps {
 export const Button: React.FC<ButtonProps> = ({
   title,
   onPress,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
   disabled = false,
   style,
 }) => {
   const getButtonStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
       borderRadius: BorderRadius.md,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flexDirection: 'row',
+      alignItems: "center",
+      justifyContent: "center",
+      flexDirection: "row",
     };
 
     // 尺寸样式
     const sizeStyles = {
-      sm: { paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, minHeight: 36 },
-      md: { paddingHorizontal: Spacing.lg, paddingVertical: Spacing.md, minHeight: 44 },
-      lg: { paddingHorizontal: Spacing.xl, paddingVertical: Spacing.lg, minHeight: 52 },
+      sm: {
+        paddingHorizontal: Spacing.md,
+        paddingVertical: Spacing.sm,
+        minHeight: 36,
+      },
+      md: {
+        paddingHorizontal: Spacing.lg,
+        paddingVertical: Spacing.md,
+        minHeight: 44,
+      },
+      lg: {
+        paddingHorizontal: Spacing.xl,
+        paddingVertical: Spacing.lg,
+        minHeight: 52,
+      },
     };
 
     // 变体样式
@@ -141,8 +159,14 @@ export const Button: React.FC<ButtonProps> = ({
       danger: {
         backgroundColor: disabled ? Colors.gray300 : Colors.danger,
       },
+      success: {
+        backgroundColor: disabled ? Colors.gray300 : Colors.success,
+      },
+      warning: {
+        backgroundColor: disabled ? Colors.gray300 : Colors.warning,
+      },
       outline: {
-        backgroundColor: 'transparent',
+        backgroundColor: "transparent",
         borderWidth: 1,
         borderColor: disabled ? Colors.gray300 : Colors.primary,
       },
@@ -158,7 +182,7 @@ export const Button: React.FC<ButtonProps> = ({
 
   const getTextStyle = (): TextStyle => {
     const baseStyle: TextStyle = {
-      fontWeight: '600',
+      fontWeight: "600",
     };
 
     const sizeStyles = {
@@ -171,6 +195,8 @@ export const Button: React.FC<ButtonProps> = ({
       primary: { color: Colors.textInverse },
       secondary: { color: Colors.textInverse },
       danger: { color: Colors.textInverse },
+      success: { color: Colors.textInverse },
+      warning: { color: Colors.textInverse },
       outline: { color: disabled ? Colors.gray400 : Colors.primary },
     };
 
@@ -198,14 +224,10 @@ interface CardProps {
 export const Card: React.FC<CardProps> = ({
   children,
   style,
-  padding = 'md',
+  padding = "md",
 }) => {
   return (
-    <View style={[
-      styles.card,
-      { padding: Spacing[padding] },
-      style,
-    ]}>
+    <View style={[styles.card, { padding: Spacing[padding] }, style]}>
       {children}
     </View>
   );
@@ -214,25 +236,33 @@ export const Card: React.FC<CardProps> = ({
 // 徽章组件
 interface BadgeProps {
   text: string;
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'danger';
-  size?: 'sm' | 'md';
+  variant?: "primary" | "secondary" | "success" | "warning" | "danger";
+  size?: "sm" | "md";
 }
 
 export const Badge: React.FC<BadgeProps> = ({
   text,
-  variant = 'primary',
-  size = 'md',
+  variant = "primary",
+  size = "md",
 }) => {
   const getBadgeStyle = (): ViewStyle => {
     const baseStyle: ViewStyle = {
       borderRadius: BorderRadius.full,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     };
 
     const sizeStyles = {
-      sm: { paddingHorizontal: Spacing.sm, paddingVertical: Spacing.xs, minHeight: 20 },
-      md: { paddingHorizontal: Spacing.md, paddingVertical: Spacing.sm, minHeight: 24 },
+      sm: {
+        paddingHorizontal: Spacing.sm,
+        paddingVertical: Spacing.xs,
+        minHeight: 20,
+      },
+      md: {
+        paddingHorizontal: Spacing.md,
+        paddingVertical: Spacing.sm,
+        minHeight: 24,
+      },
     };
 
     const variantStyles = {
@@ -267,7 +297,7 @@ export const Badge: React.FC<BadgeProps> = ({
     return {
       ...sizeStyles[size],
       ...variantStyles[variant],
-      fontWeight: '600',
+      fontWeight: "600",
     };
   };
 
@@ -295,18 +325,20 @@ export const ProgressBar: React.FC<ProgressBarProps> = ({
   style,
 }) => {
   return (
-    <View style={[
-      {
-        height,
-        backgroundColor,
-        borderRadius: BorderRadius.full,
-        overflow: 'hidden',
-      },
-      style,
-    ]}>
+    <View
+      style={[
+        {
+          height,
+          backgroundColor,
+          borderRadius: BorderRadius.full,
+          overflow: "hidden",
+        },
+        style,
+      ]}
+    >
       <View
         style={{
-          height: '100%',
+          height: "100%",
           width: `${Math.min(100, Math.max(0, progress))}%`,
           backgroundColor: color,
           borderRadius: BorderRadius.full,

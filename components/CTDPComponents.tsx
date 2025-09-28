@@ -1,11 +1,25 @@
-import { Ionicons } from '@expo/vector-icons';
-import React, { useState } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
-import { Badge, BorderRadius, Button, Card, Colors, FontSizes, ProgressBar, Spacing } from './DesignSystem';
+import { Ionicons } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { Alert, StyleSheet, Text, View } from "react-native";
+import {
+  Badge,
+  BorderRadius,
+  Button,
+  Card,
+  Colors,
+  FontSizes,
+  ProgressBar,
+  Spacing,
+} from "./DesignSystem";
 
 // 链状态类型
-export type ChainType = 'MAIN' | 'AUX';
-export type ChainStatus = 'IDLE' | 'TRIGGERED' | 'FOCUSING' | 'SUCCESS' | 'FAILED';
+export type ChainType = "MAIN" | "AUX";
+export type ChainStatus =
+  | "IDLE"
+  | "TRIGGERED"
+  | "FOCUSING"
+  | "SUCCESS"
+  | "FAILED";
 
 // 链数据接口
 export interface ChainData {
@@ -39,22 +53,22 @@ export const MainChain: React.FC<MainChainProps> = ({
 
   const handleViolation = () => {
     Alert.alert(
-      '违规判定',
+      "违规判定",
       '检测到可能违反"最好状态"的行为，请选择处理方式：',
       [
         {
-          text: '清空主链',
-          style: 'destructive',
+          text: "清空主链",
+          style: "destructive",
           onPress: () => {
             setIsActive(false);
-            onViolation('RESET');
+            onViolation("RESET");
           },
         },
         {
-          text: '永久允许',
-          style: 'default',
+          text: "永久允许",
+          style: "default",
           onPress: () => {
-            onViolation('ALLOW');
+            onViolation("ALLOW");
           },
         },
       ]
@@ -63,19 +77,27 @@ export const MainChain: React.FC<MainChainProps> = ({
 
   const getStatusColor = () => {
     switch (chain.status) {
-      case 'SUCCESS': return Colors.success;
-      case 'FAILED': return Colors.danger;
-      case 'FOCUSING': return Colors.primary;
-      default: return Colors.gray400;
+      case "SUCCESS":
+        return Colors.success;
+      case "FAILED":
+        return Colors.danger;
+      case "FOCUSING":
+        return Colors.primary;
+      default:
+        return Colors.gray400;
     }
   };
 
   const getStatusText = () => {
     switch (chain.status) {
-      case 'SUCCESS': return '已完成';
-      case 'FAILED': return '已失败';
-      case 'FOCUSING': return '专注中';
-      default: return '待触发';
+      case "SUCCESS":
+        return "已完成";
+      case "FAILED":
+        return "已失败";
+      case "FOCUSING":
+        return "专注中";
+      default:
+        return "待触发";
     }
   };
 
@@ -86,9 +108,15 @@ export const MainChain: React.FC<MainChainProps> = ({
           <Text style={styles.chainTitle}>主链 (专注链)</Text>
           <Text style={styles.chainSubtitle}>神圣座位原理</Text>
         </View>
-        <Badge 
-          text={getStatusText()} 
-          variant={chain.status === 'SUCCESS' ? 'success' : chain.status === 'FAILED' ? 'danger' : 'primary'}
+        <Badge
+          text={getStatusText()}
+          variant={
+            chain.status === "SUCCESS"
+              ? "success"
+              : chain.status === "FAILED"
+              ? "danger"
+              : "primary"
+          }
         />
       </View>
 
@@ -103,20 +131,23 @@ export const MainChain: React.FC<MainChainProps> = ({
         </View>
         <View style={styles.statItem}>
           <Text style={styles.statValue}>
-            {Math.round((chain.currentLength / Math.max(chain.bestLength, 1)) * 100)}%
+            {Math.round(
+              (chain.currentLength / Math.max(chain.bestLength, 1)) * 100
+            )}
+            %
           </Text>
           <Text style={styles.statLabel}>完成度</Text>
         </View>
       </View>
 
-      <ProgressBar 
+      <ProgressBar
         progress={(chain.currentLength / Math.max(chain.bestLength, 1)) * 100}
         color={getStatusColor()}
         style={styles.progressBar}
       />
 
       <View style={styles.chainActions}>
-        {chain.status === 'IDLE' && (
+        {chain.status === "IDLE" && (
           <Button
             title="触发神圣座位"
             onPress={handleTrigger}
@@ -124,8 +155,8 @@ export const MainChain: React.FC<MainChainProps> = ({
             style={styles.triggerButton}
           />
         )}
-        
-        {chain.status === 'FOCUSING' && (
+
+        {chain.status === "FOCUSING" && (
           <View style={styles.focusingActions}>
             <Button
               title="报告违规"
@@ -179,7 +210,7 @@ export const AuxChain: React.FC<AuxChainProps> = ({
     setIsScheduled(true);
     setCountdown(15 * 60); // 15分钟倒计时
     onSchedule();
-    
+
     // 开始倒计时
     const timer = setInterval(() => {
       setCountdown((prev) => {
@@ -197,7 +228,7 @@ export const AuxChain: React.FC<AuxChainProps> = ({
   const formatTime = (seconds: number) => {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+    return `${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
   };
 
   return (
@@ -207,17 +238,15 @@ export const AuxChain: React.FC<AuxChainProps> = ({
           <Text style={styles.chainTitle}>辅助链 (预约链)</Text>
           <Text style={styles.chainSubtitle}>线性时延原理</Text>
         </View>
-        <Badge 
-          text={isScheduled ? '预约中' : '待预约'} 
-          variant={isScheduled ? 'warning' : 'secondary'}
+        <Badge
+          text={isScheduled ? "预约中" : "待预约"}
+          variant={isScheduled ? "warning" : "secondary"}
         />
       </View>
 
       {isScheduled && (
         <View style={styles.countdownContainer}>
-          <Text style={styles.countdownText}>
-            {formatTime(countdown)}
-          </Text>
+          <Text style={styles.countdownText}>{formatTime(countdown)}</Text>
           <Text style={styles.countdownLabel}>剩余时间</Text>
         </View>
       )}
@@ -231,7 +260,7 @@ export const AuxChain: React.FC<AuxChainProps> = ({
             style={styles.scheduleButton}
           />
         )}
-        
+
         {isScheduled && (
           <View style={styles.scheduledActions}>
             <Button
@@ -291,7 +320,7 @@ export const PrecedentManager: React.FC<PrecedentManagerProps> = ({
       <Text style={styles.precedentSubtitle}>
         已建立 {precedents.length} 个判例规则
       </Text>
-      
+
       <View style={styles.precedentList}>
         {precedents.map((precedent) => (
           <View key={precedent.id} style={styles.precedentItem}>
@@ -304,8 +333,8 @@ export const PrecedentManager: React.FC<PrecedentManagerProps> = ({
               </Text>
             </View>
             <Badge
-              text={precedent.allowed ? '允许' : '禁止'}
-              variant={precedent.allowed ? 'success' : 'danger'}
+              text={precedent.allowed ? "允许" : "禁止"}
+              variant={precedent.allowed ? "success" : "danger"}
               size="sm"
             />
           </View>
@@ -320,9 +349,9 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.lg,
   },
   chainHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     marginBottom: Spacing.md,
   },
   chainInfo: {
@@ -330,7 +359,7 @@ const styles = StyleSheet.create({
   },
   chainTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -339,19 +368,19 @@ const styles = StyleSheet.create({
     color: Colors.textSecondary,
   },
   chainStats: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginBottom: Spacing.md,
     paddingVertical: Spacing.md,
     backgroundColor: Colors.backgroundSecondary,
     borderRadius: BorderRadius.md,
   },
   statItem: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   statValue: {
     fontSize: FontSizes.xl,
-    fontWeight: '700',
+    fontWeight: "700",
     color: Colors.primary,
     marginBottom: Spacing.xs,
   },
@@ -369,7 +398,7 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   focusingActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.sm,
   },
   violationButton: {
@@ -379,8 +408,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sunkCostWarning: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: Spacing.sm,
     backgroundColor: Colors.warningLight,
     borderRadius: BorderRadius.md,
@@ -392,15 +421,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   countdownContainer: {
-    alignItems: 'center',
+    alignItems: "center",
     marginBottom: Spacing.md,
     padding: Spacing.md,
     backgroundColor: Colors.primaryLight,
     borderRadius: BorderRadius.md,
   },
   countdownText: {
-    fontSize: FontSizes['3xl'],
-    fontWeight: '700',
+    fontSize: FontSizes["3xl"],
+    fontWeight: "700",
     color: Colors.primaryDark,
     marginBottom: Spacing.xs,
   },
@@ -412,15 +441,15 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.sm,
   },
   scheduledActions: {
-    flexDirection: 'row',
+    flexDirection: "row",
     gap: Spacing.sm,
   },
   cancelButton: {
     flex: 1,
   },
   auxExplanation: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: Spacing.sm,
     backgroundColor: Colors.primaryLight,
     borderRadius: BorderRadius.md,
@@ -436,7 +465,7 @@ const styles = StyleSheet.create({
   },
   precedentTitle: {
     fontSize: FontSizes.lg,
-    fontWeight: '600',
+    fontWeight: "600",
     color: Colors.textPrimary,
     marginBottom: Spacing.xs,
   },
@@ -449,9 +478,9 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   precedentItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
     padding: Spacing.sm,
     backgroundColor: Colors.backgroundSecondary,
     borderRadius: BorderRadius.md,
