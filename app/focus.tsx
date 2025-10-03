@@ -10,6 +10,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function FocusScreen() {
   const [isFocusing, setIsFocusing] = useState(false);
@@ -184,186 +185,190 @@ export default function FocusScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 专注状态卡片 */}
-      <Card style={styles.focusCard}>
-        <View style={styles.focusHeader}>
-          <Text style={styles.focusTitle}>神圣座位</Text>
-          <Badge
-            text={isFocusing ? "专注中" : "待开始"}
-            variant={isFocusing ? "success" : "secondary"}
-          />
-        </View>
-
-        {/* 时间显示 */}
-        <View style={styles.timeContainer}>
-          <Text style={[styles.timeText, { color: getTimeColor() }]}>
-            {formatTime(focusTime)}
-          </Text>
-          <Text style={styles.timeLabel}>/ {formatTime(targetTime)}</Text>
-        </View>
-
-        {/* 进度条 */}
-        <View style={styles.progressContainer}>
-          <View style={styles.progressBar}>
-            <View
-              style={[
-                styles.progressFill,
-                {
-                  width: `${getProgress()}%`,
-                  backgroundColor: getTimeColor(),
-                },
-              ]}
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* 专注状态卡片 */}
+        <Card style={styles.focusCard}>
+          <View style={styles.focusHeader}>
+            <Text style={styles.focusTitle}>神圣座位</Text>
+            <Badge
+              text={isFocusing ? "专注中" : "待开始"}
+              variant={isFocusing ? "success" : "secondary"}
             />
           </View>
-          <Text style={styles.progressText}>{Math.round(getProgress())}%</Text>
-        </View>
 
-        {/* 链信息 */}
-        <View style={styles.chainInfo}>
-          <View style={styles.chainStat}>
-            <Text style={styles.chainValue}>#{currentChainLength}</Text>
-            <Text style={styles.chainLabel}>当前链长</Text>
+          {/* 时间显示 */}
+          <View style={styles.timeContainer}>
+            <Text style={[styles.timeText, { color: getTimeColor() }]}>
+              {formatTime(focusTime)}
+            </Text>
+            <Text style={styles.timeLabel}>/ {formatTime(targetTime)}</Text>
           </View>
-          <View style={styles.chainStat}>
-            <Text style={styles.chainValue}>{violations.length}</Text>
-            <Text style={styles.chainLabel}>违规次数</Text>
-          </View>
-        </View>
-      </Card>
 
-      {/* 控制按钮 */}
-      <Card style={styles.controlsCard}>
-        <Text style={styles.sectionTitle}>专注控制</Text>
-
-        {!isFocusing ? (
-          <View style={styles.controlButtons}>
-            <Button
-              title="开始专注"
-              onPress={handleStartFocus}
-              variant="primary"
-              size="lg"
-              style={styles.startButton}
-            />
-            <Button
-              title="设置时长"
-              onPress={() => {
-                Alert.alert("设置专注时长", "选择专注时长：", [
-                  { text: "30分钟", onPress: () => setTargetTime(30 * 60) },
-                  { text: "60分钟", onPress: () => setTargetTime(60 * 60) },
-                  { text: "90分钟", onPress: () => setTargetTime(90 * 60) },
-                  { text: "取消", style: "cancel" },
-                ]);
-              }}
-              variant="outline"
-              style={styles.settingsButton}
-            />
-          </View>
-        ) : (
-          <View style={styles.controlButtons}>
-            <Button
-              title="暂停"
-              onPress={handlePauseFocus}
-              variant="warning"
-              style={styles.pauseButton}
-            />
-            <Button
-              title="完成"
-              onPress={handleCompleteFocus}
-              variant="success"
-              style={styles.completeButton}
-            />
-            <Button
-              title="放弃"
-              onPress={handleAbandonFocus}
-              variant="danger"
-              style={styles.abandonButton}
-            />
-          </View>
-        )}
-      </Card>
-
-      {/* 违规管理 */}
-      <Card style={styles.violationCard}>
-        <View style={styles.violationHeader}>
-          <Text style={styles.sectionTitle}>违规管理</Text>
-          <Button
-            title="报告违规"
-            onPress={handleReportViolation}
-            variant="outline"
-            size="sm"
-          />
-        </View>
-
-        {violations.length > 0 ? (
-          <View style={styles.violationList}>
-            {violations.map((violation, index) => (
-              <View key={index} style={styles.violationItem}>
-                <Ionicons name="warning" size={16} color={Colors.warning} />
-                <Text style={styles.violationText}>{violation}</Text>
-                <Text style={styles.violationTime}>
-                  {new Date().toLocaleTimeString()}
-                </Text>
-              </View>
-            ))}
-          </View>
-        ) : (
-          <View style={styles.noViolations}>
-            <Ionicons
-              name="checkmark-circle"
-              size={24}
-              color={Colors.success}
-            />
-            <Text style={styles.noViolationsText}>暂无违规行为</Text>
-          </View>
-        )}
-      </Card>
-
-      {/* 神圣座位原理说明 */}
-      <Card style={styles.explanationCard}>
-        <Text style={styles.sectionTitle}>神圣座位原理</Text>
-        <View style={styles.explanationContent}>
-          <View style={styles.explanationItem}>
-            <Ionicons name="link" size={20} color={Colors.primary} />
-            <Text style={styles.explanationText}>
-              非线性价值压缩：整个任务链的沉没成本被压缩到当下
+          {/* 进度条 */}
+          <View style={styles.progressContainer}>
+            <View style={styles.progressBar}>
+              <View
+                style={[
+                  styles.progressFill,
+                  {
+                    width: `${getProgress()}%`,
+                    backgroundColor: getTimeColor(),
+                  },
+                ]}
+              />
+            </View>
+            <Text style={styles.progressText}>
+              {Math.round(getProgress())}%
             </Text>
           </View>
-          <View style={styles.explanationItem}>
-            <Ionicons name="scale" size={20} color={Colors.secondary} />
-            <Text style={styles.explanationText}>
-              下必为例：一次违规要么清空主链，要么永久允许该行为
-            </Text>
-          </View>
-          <View style={styles.explanationItem}>
-            <Ionicons
-              name="shield-checkmark"
-              size={20}
-              color={Colors.success}
-            />
-            <Text style={styles.explanationText}>
-              沉没成本保护：放弃将损失所有已积累的节点价值
-            </Text>
-          </View>
-        </View>
-      </Card>
 
-      {/* 风险提示 */}
-      {currentChainLength > 5 && (
-        <Card style={styles.riskCard}>
-          <View style={styles.riskHeader}>
-            <Ionicons name="warning" size={20} color={Colors.warning} />
-            <Text style={styles.riskTitle}>高风险提示</Text>
+          {/* 链信息 */}
+          <View style={styles.chainInfo}>
+            <View style={styles.chainStat}>
+              <Text style={styles.chainValue}>#{currentChainLength}</Text>
+              <Text style={styles.chainLabel}>当前链长</Text>
+            </View>
+            <View style={styles.chainStat}>
+              <Text style={styles.chainValue}>{violations.length}</Text>
+              <Text style={styles.chainLabel}>违规次数</Text>
+            </View>
           </View>
-          <Text style={styles.riskText}>
-            当前链长度已达到 #{currentChainLength}，放弃将损失大量沉没成本。
-            建议坚持完成当前专注，避免破窗效应。
-          </Text>
         </Card>
-      )}
 
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+        {/* 控制按钮 */}
+        <Card style={styles.controlsCard}>
+          <Text style={styles.sectionTitle}>专注控制</Text>
+
+          {!isFocusing ? (
+            <View style={styles.controlButtons}>
+              <Button
+                title="开始专注"
+                onPress={handleStartFocus}
+                variant="primary"
+                size="lg"
+                style={styles.startButton}
+              />
+              <Button
+                title="设置时长"
+                onPress={() => {
+                  Alert.alert("设置专注时长", "选择专注时长：", [
+                    { text: "30分钟", onPress: () => setTargetTime(30 * 60) },
+                    { text: "60分钟", onPress: () => setTargetTime(60 * 60) },
+                    { text: "90分钟", onPress: () => setTargetTime(90 * 60) },
+                    { text: "取消", style: "cancel" },
+                  ]);
+                }}
+                variant="outline"
+                style={styles.settingsButton}
+              />
+            </View>
+          ) : (
+            <View style={styles.controlButtons}>
+              <Button
+                title="暂停"
+                onPress={handlePauseFocus}
+                variant="warning"
+                style={styles.pauseButton}
+              />
+              <Button
+                title="完成"
+                onPress={handleCompleteFocus}
+                variant="success"
+                style={styles.completeButton}
+              />
+              <Button
+                title="放弃"
+                onPress={handleAbandonFocus}
+                variant="danger"
+                style={styles.abandonButton}
+              />
+            </View>
+          )}
+        </Card>
+
+        {/* 违规管理 */}
+        <Card style={styles.violationCard}>
+          <View style={styles.violationHeader}>
+            <Text style={styles.sectionTitle}>违规管理</Text>
+            <Button
+              title="报告违规"
+              onPress={handleReportViolation}
+              variant="outline"
+              size="sm"
+            />
+          </View>
+
+          {violations.length > 0 ? (
+            <View style={styles.violationList}>
+              {violations.map((violation, index) => (
+                <View key={index} style={styles.violationItem}>
+                  <Ionicons name="warning" size={16} color={Colors.warning} />
+                  <Text style={styles.violationText}>{violation}</Text>
+                  <Text style={styles.violationTime}>
+                    {new Date().toLocaleTimeString()}
+                  </Text>
+                </View>
+              ))}
+            </View>
+          ) : (
+            <View style={styles.noViolations}>
+              <Ionicons
+                name="checkmark-circle"
+                size={24}
+                color={Colors.success}
+              />
+              <Text style={styles.noViolationsText}>暂无违规行为</Text>
+            </View>
+          )}
+        </Card>
+
+        {/* 神圣座位原理说明 */}
+        <Card style={styles.explanationCard}>
+          <Text style={styles.sectionTitle}>神圣座位原理</Text>
+          <View style={styles.explanationContent}>
+            <View style={styles.explanationItem}>
+              <Ionicons name="link" size={20} color={Colors.primary} />
+              <Text style={styles.explanationText}>
+                非线性价值压缩：整个任务链的沉没成本被压缩到当下
+              </Text>
+            </View>
+            <View style={styles.explanationItem}>
+              <Ionicons name="scale" size={20} color={Colors.secondary} />
+              <Text style={styles.explanationText}>
+                下必为例：一次违规要么清空主链，要么永久允许该行为
+              </Text>
+            </View>
+            <View style={styles.explanationItem}>
+              <Ionicons
+                name="shield-checkmark"
+                size={20}
+                color={Colors.success}
+              />
+              <Text style={styles.explanationText}>
+                沉没成本保护：放弃将损失所有已积累的节点价值
+              </Text>
+            </View>
+          </View>
+        </Card>
+
+        {/* 风险提示 */}
+        {currentChainLength > 5 && (
+          <Card style={styles.riskCard}>
+            <View style={styles.riskHeader}>
+              <Ionicons name="warning" size={20} color={Colors.warning} />
+              <Text style={styles.riskTitle}>高风险提示</Text>
+            </View>
+            <Text style={styles.riskText}>
+              当前链长度已达到 #{currentChainLength}，放弃将损失大量沉没成本。
+              建议坚持完成当前专注，避免破窗效应。
+            </Text>
+          </Card>
+        )}
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

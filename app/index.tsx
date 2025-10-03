@@ -23,6 +23,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Dashboard() {
   // 模拟数据
@@ -175,164 +176,166 @@ export default function Dashboard() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 欢迎区域 */}
-      <View style={styles.welcomeSection}>
-        <Text style={styles.welcomeTitle}>今日自控状态</Text>
-        <Text style={styles.welcomeSubtitle}>
-          {new Date().toLocaleDateString("zh-CN", {
-            year: "numeric",
-            month: "long",
-            day: "numeric",
-            weekday: "long",
-          })}
-        </Text>
-      </View>
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* 欢迎区域 */}
+        <View style={styles.welcomeSection}>
+          <Text style={styles.welcomeTitle}>今日自控状态</Text>
+          <Text style={styles.welcomeSubtitle}>
+            {new Date().toLocaleDateString("zh-CN", {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+              weekday: "long",
+            })}
+          </Text>
+        </View>
 
-      {/* 关键指标卡片 */}
-      <View style={styles.metricsRow}>
-        <Card style={styles.metricCard}>
-          <View style={styles.metricContent}>
-            <Ionicons name="trending-up" size={24} color={Colors.primary} />
-            <Text style={styles.metricValue}>{getTodayProgress()}%</Text>
-            <Text style={styles.metricLabel}>今日完成度</Text>
+        {/* 关键指标卡片 */}
+        <View style={styles.metricsRow}>
+          <Card style={styles.metricCard}>
+            <View style={styles.metricContent}>
+              <Ionicons name="trending-up" size={24} color={Colors.primary} />
+              <Text style={styles.metricValue}>{getTodayProgress()}%</Text>
+              <Text style={styles.metricLabel}>今日完成度</Text>
+            </View>
+          </Card>
+
+          <Card style={styles.metricCard}>
+            <View style={styles.metricContent}>
+              <Ionicons name="link" size={24} color={Colors.secondary} />
+              <Text style={styles.metricValue}>{getChainHealth()}%</Text>
+              <Text style={styles.metricLabel}>链健康度</Text>
+            </View>
+          </Card>
+        </View>
+
+        {/* 快速操作 */}
+        <Card style={styles.quickActionsCard}>
+          <Text style={styles.sectionTitle}>快速操作</Text>
+          <View style={styles.quickActions}>
+            <TouchableOpacity style={styles.quickAction}>
+              <Ionicons name="timer-outline" size={24} color={Colors.primary} />
+              <Text style={styles.quickActionText}>预约专注</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.quickAction}>
+              <Ionicons
+                name="add-circle-outline"
+                size={24}
+                color={Colors.secondary}
+              />
+              <Text style={styles.quickActionText}>添加定式</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.quickAction}>
+              <Ionicons
+                name="analytics-outline"
+                size={24}
+                color={Colors.warning}
+              />
+              <Text style={styles.quickActionText}>查看分析</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.quickAction}>
+              <Ionicons
+                name="settings-outline"
+                size={24}
+                color={Colors.gray500}
+              />
+              <Text style={styles.quickActionText}>设置</Text>
+            </TouchableOpacity>
           </View>
         </Card>
 
-        <Card style={styles.metricCard}>
-          <View style={styles.metricContent}>
-            <Ionicons name="link" size={24} color={Colors.secondary} />
-            <Text style={styles.metricValue}>{getChainHealth()}%</Text>
-            <Text style={styles.metricLabel}>链健康度</Text>
-          </View>
-        </Card>
-      </View>
-
-      {/* 快速操作 */}
-      <Card style={styles.quickActionsCard}>
-        <Text style={styles.sectionTitle}>快速操作</Text>
-        <View style={styles.quickActions}>
-          <TouchableOpacity style={styles.quickAction}>
-            <Ionicons name="timer-outline" size={24} color={Colors.primary} />
-            <Text style={styles.quickActionText}>预约专注</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickAction}>
-            <Ionicons
-              name="add-circle-outline"
-              size={24}
-              color={Colors.secondary}
-            />
-            <Text style={styles.quickActionText}>添加定式</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickAction}>
-            <Ionicons
-              name="analytics-outline"
-              size={24}
-              color={Colors.warning}
-            />
-            <Text style={styles.quickActionText}>查看分析</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity style={styles.quickAction}>
-            <Ionicons
-              name="settings-outline"
-              size={24}
-              color={Colors.gray500}
-            />
-            <Text style={styles.quickActionText}>设置</Text>
-          </TouchableOpacity>
-        </View>
-      </Card>
-
-      {/* CTDP 主链 */}
-      <MainChain
-        chain={mainChain}
-        onTrigger={handleMainChainTrigger}
-        onViolation={handleMainChainViolation}
-      />
-
-      {/* CTDP 辅助链 */}
-      <AuxChain
-        chain={auxChain}
-        onSchedule={handleAuxSchedule}
-        onTrigger={handleAuxTrigger}
-        onMiss={handleAuxMiss}
-      />
-
-      {/* 判例管理 */}
-      <PrecedentManager
-        precedents={precedents}
-        onAddPrecedent={(behavior, allowed) => {
-          const newPrecedent: PrecedentCase = {
-            id: `p${precedents.length + 1}`,
-            behaviorKey: behavior,
-            allowed,
-            decidedAt: new Date(),
-          };
-          setPrecedents((prev) => [...prev, newPrecedent]);
-        }}
-      />
-
-      {/* 今日定式进度 */}
-      <Card style={styles.patternsCard}>
-        <Text style={styles.sectionTitle}>今日定式进度</Text>
-        <View style={styles.patternsList}>
-          {patterns
-            .filter((p) => p.isActive)
-            .map((pattern) => (
-              <View key={pattern.id} style={styles.patternItem}>
-                <View style={styles.patternInfo}>
-                  <Text style={styles.patternTitle}>{pattern.title}</Text>
-                  <Text style={styles.patternDescription}>
-                    {pattern.description}
-                  </Text>
-                </View>
-                <View style={styles.patternStatus}>
-                  {pattern.lastSuccessAt &&
-                  pattern.lastSuccessAt.toDateString() ===
-                    new Date().toDateString() ? (
-                    <Badge text="已完成" variant="success" size="sm" />
-                  ) : (
-                    <Badge text="待完成" variant="secondary" size="sm" />
-                  )}
-                </View>
-              </View>
-            ))}
-        </View>
-        <ProgressBar
-          progress={getTodayProgress()}
-          style={styles.patternsProgress}
+        {/* CTDP 主链 */}
+        <MainChain
+          chain={mainChain}
+          onTrigger={handleMainChainTrigger}
+          onViolation={handleMainChainViolation}
         />
-      </Card>
 
-      {/* 稳态分析 */}
-      <SteadyStateAnalysis patterns={patterns} metrics={metrics} />
+        {/* CTDP 辅助链 */}
+        <AuxChain
+          chain={auxChain}
+          onSchedule={handleAuxSchedule}
+          onTrigger={handleAuxTrigger}
+          onMiss={handleAuxMiss}
+        />
 
-      {/* 风险提示 */}
-      <Card style={styles.riskCard}>
-        <View style={styles.riskHeader}>
-          <Ionicons name="warning" size={20} color={Colors.warning} />
-          <Text style={styles.riskTitle}>风险提示</Text>
-        </View>
-        <View style={styles.riskList}>
-          <View style={styles.riskItem}>
-            <Text style={styles.riskText}>
-              • 主链已连续12次成功，注意避免破窗效应
-            </Text>
-          </View>
-          <View style={styles.riskItem}>
-            <Text style={styles.riskText}>• 手机使用时间较昨日增加15%</Text>
-          </View>
-          <View style={styles.riskItem}>
-            <Text style={styles.riskText}>• 建议添加新的定式来强化稳态</Text>
-          </View>
-        </View>
-      </Card>
+        {/* 判例管理 */}
+        <PrecedentManager
+          precedents={precedents}
+          onAddPrecedent={(behavior, allowed) => {
+            const newPrecedent: PrecedentCase = {
+              id: `p${precedents.length + 1}`,
+              behaviorKey: behavior,
+              allowed,
+              decidedAt: new Date(),
+            };
+            setPrecedents((prev) => [...prev, newPrecedent]);
+          }}
+        />
 
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+        {/* 今日定式进度 */}
+        <Card style={styles.patternsCard}>
+          <Text style={styles.sectionTitle}>今日定式进度</Text>
+          <View style={styles.patternsList}>
+            {patterns
+              .filter((p) => p.isActive)
+              .map((pattern) => (
+                <View key={pattern.id} style={styles.patternItem}>
+                  <View style={styles.patternInfo}>
+                    <Text style={styles.patternTitle}>{pattern.title}</Text>
+                    <Text style={styles.patternDescription}>
+                      {pattern.description}
+                    </Text>
+                  </View>
+                  <View style={styles.patternStatus}>
+                    {pattern.lastSuccessAt &&
+                    pattern.lastSuccessAt.toDateString() ===
+                      new Date().toDateString() ? (
+                      <Badge text="已完成" variant="success" size="sm" />
+                    ) : (
+                      <Badge text="待完成" variant="secondary" size="sm" />
+                    )}
+                  </View>
+                </View>
+              ))}
+          </View>
+          <ProgressBar
+            progress={getTodayProgress()}
+            style={styles.patternsProgress}
+          />
+        </Card>
+
+        {/* 稳态分析 */}
+        <SteadyStateAnalysis patterns={patterns} metrics={metrics} />
+
+        {/* 风险提示 */}
+        <Card style={styles.riskCard}>
+          <View style={styles.riskHeader}>
+            <Ionicons name="warning" size={20} color={Colors.warning} />
+            <Text style={styles.riskTitle}>风险提示</Text>
+          </View>
+          <View style={styles.riskList}>
+            <View style={styles.riskItem}>
+              <Text style={styles.riskText}>
+                • 主链已连续12次成功，注意避免破窗效应
+              </Text>
+            </View>
+            <View style={styles.riskItem}>
+              <Text style={styles.riskText}>• 手机使用时间较昨日增加15%</Text>
+            </View>
+            <View style={styles.riskItem}>
+              <Text style={styles.riskText}>• 建议添加新的定式来强化稳态</Text>
+            </View>
+          </View>
+        </Card>
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

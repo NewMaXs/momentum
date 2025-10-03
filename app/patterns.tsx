@@ -24,6 +24,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function PatternsScreen() {
   const [patterns, setPatterns] = useState<Pattern[]>([
@@ -266,131 +267,135 @@ export default function PatternsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 定式概览 */}
-      <Card style={styles.overviewCard}>
-        <Text style={styles.overviewTitle}>定式树概览</Text>
-        <View style={styles.overviewStats}>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{patterns.length}</Text>
-            <Text style={styles.statLabel}>总定式</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{getActivePatternsCount()}</Text>
-            <Text style={styles.statLabel}>活跃定式</Text>
-          </View>
-          <View style={styles.statItem}>
-            <Text style={styles.statValue}>{getReinforcedPatternsCount()}</Text>
-            <Text style={styles.statLabel}>强化定式</Text>
-          </View>
-        </View>
-      </Card>
-
-      {/* 定式树 */}
-      <PatternTree
-        patterns={patterns}
-        onAddPattern={handleAddPattern}
-        onRemovePattern={handleRemovePattern}
-        onReinforcePattern={handleReinforcePattern}
-        onTogglePattern={handleTogglePattern}
-      />
-
-      {/* 模板库 */}
-      <PatternTemplateLibrary
-        templates={templates}
-        onSelectTemplate={handleSelectTemplate}
-      />
-
-      {/* 稳态分析 */}
-      <SteadyStateAnalysis patterns={patterns} metrics={metrics} />
-
-      {/* 添加定式弹窗 */}
-      {showAddPattern && (
-        <View style={styles.modalOverlay}>
-          <Card style={styles.modalCard}>
-            <View style={styles.modalHeader}>
-              <Text style={styles.modalTitle}>添加新定式</Text>
-              <TouchableOpacity onPress={() => setShowAddPattern(false)}>
-                <Ionicons name="close" size={24} color={Colors.gray500} />
-              </TouchableOpacity>
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* 定式概览 */}
+        <Card style={styles.overviewCard}>
+          <Text style={styles.overviewTitle}>定式树概览</Text>
+          <View style={styles.overviewStats}>
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{patterns.length}</Text>
+              <Text style={styles.statLabel}>总定式</Text>
             </View>
-
-            <ScrollView style={styles.modalContent}>
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>定式名称</Text>
-                <TextInput
-                  style={styles.textInput}
-                  value={newPattern.title}
-                  onChangeText={(text) =>
-                    setNewPattern((prev) => ({ ...prev, title: text }))
-                  }
-                  placeholder="例如：回家立即洗澡"
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>描述</Text>
-                <TextInput
-                  style={[styles.textInput, styles.textArea]}
-                  value={newPattern.description}
-                  onChangeText={(text) =>
-                    setNewPattern((prev) => ({ ...prev, description: text }))
-                  }
-                  placeholder="详细描述这个定式的目的和意义"
-                  multiline
-                  numberOfLines={3}
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>触发条件</Text>
-                <TextInput
-                  style={[styles.textInput, styles.textArea]}
-                  value={newPattern.triggerRule}
-                  onChangeText={(text) =>
-                    setNewPattern((prev) => ({ ...prev, triggerRule: text }))
-                  }
-                  placeholder="描述什么情况下触发这个定式"
-                  multiline
-                  numberOfLines={2}
-                />
-              </View>
-
-              <View style={styles.inputGroup}>
-                <Text style={styles.inputLabel}>执行动作</Text>
-                <TextInput
-                  style={[styles.textInput, styles.textArea]}
-                  value={newPattern.actionRule}
-                  onChangeText={(text) =>
-                    setNewPattern((prev) => ({ ...prev, actionRule: text }))
-                  }
-                  placeholder="描述具体要执行的动作"
-                  multiline
-                  numberOfLines={2}
-                />
-              </View>
-            </ScrollView>
-
-            <View style={styles.modalActions}>
-              <Button
-                title="取消"
-                onPress={() => setShowAddPattern(false)}
-                variant="outline"
-                style={styles.modalButton}
-              />
-              <Button
-                title="创建定式"
-                onPress={handleCreateCustomPattern}
-                variant="primary"
-                style={styles.modalButton}
-              />
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>{getActivePatternsCount()}</Text>
+              <Text style={styles.statLabel}>活跃定式</Text>
             </View>
-          </Card>
-        </View>
-      )}
+            <View style={styles.statItem}>
+              <Text style={styles.statValue}>
+                {getReinforcedPatternsCount()}
+              </Text>
+              <Text style={styles.statLabel}>强化定式</Text>
+            </View>
+          </View>
+        </Card>
 
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+        {/* 定式树 */}
+        <PatternTree
+          patterns={patterns}
+          onAddPattern={handleAddPattern}
+          onRemovePattern={handleRemovePattern}
+          onReinforcePattern={handleReinforcePattern}
+          onTogglePattern={handleTogglePattern}
+        />
+
+        {/* 模板库 */}
+        <PatternTemplateLibrary
+          templates={templates}
+          onSelectTemplate={handleSelectTemplate}
+        />
+
+        {/* 稳态分析 */}
+        <SteadyStateAnalysis patterns={patterns} metrics={metrics} />
+
+        {/* 添加定式弹窗 */}
+        {showAddPattern && (
+          <View style={styles.modalOverlay}>
+            <Card style={styles.modalCard}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>添加新定式</Text>
+                <TouchableOpacity onPress={() => setShowAddPattern(false)}>
+                  <Ionicons name="close" size={24} color={Colors.gray500} />
+                </TouchableOpacity>
+              </View>
+
+              <ScrollView style={styles.modalContent}>
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>定式名称</Text>
+                  <TextInput
+                    style={styles.textInput}
+                    value={newPattern.title}
+                    onChangeText={(text) =>
+                      setNewPattern((prev) => ({ ...prev, title: text }))
+                    }
+                    placeholder="例如：回家立即洗澡"
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>描述</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.textArea]}
+                    value={newPattern.description}
+                    onChangeText={(text) =>
+                      setNewPattern((prev) => ({ ...prev, description: text }))
+                    }
+                    placeholder="详细描述这个定式的目的和意义"
+                    multiline
+                    numberOfLines={3}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>触发条件</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.textArea]}
+                    value={newPattern.triggerRule}
+                    onChangeText={(text) =>
+                      setNewPattern((prev) => ({ ...prev, triggerRule: text }))
+                    }
+                    placeholder="描述什么情况下触发这个定式"
+                    multiline
+                    numberOfLines={2}
+                  />
+                </View>
+
+                <View style={styles.inputGroup}>
+                  <Text style={styles.inputLabel}>执行动作</Text>
+                  <TextInput
+                    style={[styles.textInput, styles.textArea]}
+                    value={newPattern.actionRule}
+                    onChangeText={(text) =>
+                      setNewPattern((prev) => ({ ...prev, actionRule: text }))
+                    }
+                    placeholder="描述具体要执行的动作"
+                    multiline
+                    numberOfLines={2}
+                  />
+                </View>
+              </ScrollView>
+
+              <View style={styles.modalActions}>
+                <Button
+                  title="取消"
+                  onPress={() => setShowAddPattern(false)}
+                  variant="outline"
+                  style={styles.modalButton}
+                />
+                <Button
+                  title="创建定式"
+                  onPress={handleCreateCustomPattern}
+                  variant="primary"
+                  style={styles.modalButton}
+                />
+              </View>
+            </Card>
+          </View>
+        )}
+
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 

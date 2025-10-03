@@ -16,6 +16,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function AnalyticsScreen() {
   const [selectedPeriod, setSelectedPeriod] = useState<
@@ -98,400 +99,413 @@ export default function AnalyticsScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* 时间选择器 */}
-      <Card style={styles.periodSelector}>
-        <View style={styles.periodButtons}>
-          {(["week", "month", "year"] as const).map((period) => (
-            <TouchableOpacity
-              key={period}
-              style={[
-                styles.periodButton,
-                selectedPeriod === period && styles.periodButtonActive,
-              ]}
-              onPress={() => setSelectedPeriod(period)}
-            >
-              <Text
+    <SafeAreaView style={{ flex: 1 }} edges={["top", "left", "right"]}>
+      <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+        {/* 时间选择器 */}
+        <Card style={styles.periodSelector}>
+          <View style={styles.periodButtons}>
+            {(["week", "month", "year"] as const).map((period) => (
+              <TouchableOpacity
+                key={period}
                 style={[
-                  styles.periodButtonText,
-                  selectedPeriod === period && styles.periodButtonTextActive,
+                  styles.periodButton,
+                  selectedPeriod === period && styles.periodButtonActive,
                 ]}
+                onPress={() => setSelectedPeriod(period)}
               >
-                {period === "week"
-                  ? "本周"
-                  : period === "month"
-                  ? "本月"
-                  : "本年"}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Card>
-
-      {/* 总体统计 */}
-      <Card style={styles.overviewCard}>
-        <Text style={styles.sectionTitle}>{getPeriodText()}总体表现</Text>
-        <View style={styles.overviewGrid}>
-          <View style={styles.overviewItem}>
-            <Ionicons name="trending-up" size={24} color={Colors.primary} />
-            <Text style={styles.overviewValue}>{getTotalSessions()}</Text>
-            <Text style={styles.overviewLabel}>总专注次数</Text>
-          </View>
-          <View style={styles.overviewItem}>
-            <Ionicons
-              name="checkmark-circle"
-              size={24}
-              color={Colors.success}
-            />
-            <Text style={styles.overviewValue}>{getOverallSuccessRate()}%</Text>
-            <Text style={styles.overviewLabel}>成功率</Text>
-          </View>
-          <View style={styles.overviewItem}>
-            <Ionicons name="time" size={24} color={Colors.secondary} />
-            <Text style={styles.overviewValue}>
-              {Math.round(
-                (chainData.mainChain.averageDuration +
-                  chainData.auxChain.averageDuration) /
-                  2
-              )}
-            </Text>
-            <Text style={styles.overviewLabel}>平均时长(分)</Text>
-          </View>
-          <View style={styles.overviewItem}>
-            <Ionicons name="git-network" size={24} color={Colors.warning} />
-            <Text style={styles.overviewValue}>
-              {patternData.activePatterns}
-            </Text>
-            <Text style={styles.overviewLabel}>活跃定式</Text>
-          </View>
-        </View>
-      </Card>
-
-      {/* 链状态分析 */}
-      <Card style={styles.chainAnalysisCard}>
-        <Text style={styles.sectionTitle}>链状态分析</Text>
-
-        <View style={styles.chainSection}>
-          <View style={styles.chainHeader}>
-            <Text style={styles.chainTitle}>主链 (专注链)</Text>
-            <Badge
-              text={`#${chainData.mainChain.currentLength}`}
-              variant="primary"
-            />
-          </View>
-          <View style={styles.chainStats}>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.mainChain.totalSessions}
-              </Text>
-              <Text style={styles.chainStatLabel}>总次数</Text>
-            </View>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.mainChain.successRate}%
-              </Text>
-              <Text style={styles.chainStatLabel}>成功率</Text>
-            </View>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.mainChain.averageDuration}
-              </Text>
-              <Text style={styles.chainStatLabel}>平均时长</Text>
-            </View>
-          </View>
-          <ProgressBar
-            progress={
-              (chainData.mainChain.currentLength /
-                chainData.mainChain.bestLength) *
-              100
-            }
-            color={Colors.primary}
-            style={styles.chainProgress}
-          />
-        </View>
-
-        <View style={styles.chainSection}>
-          <View style={styles.chainHeader}>
-            <Text style={styles.chainTitle}>辅助链 (预约链)</Text>
-            <Badge
-              text={`#${chainData.auxChain.currentLength}`}
-              variant="secondary"
-            />
-          </View>
-          <View style={styles.chainStats}>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.auxChain.totalSessions}
-              </Text>
-              <Text style={styles.chainStatLabel}>总次数</Text>
-            </View>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.auxChain.successRate}%
-              </Text>
-              <Text style={styles.chainStatLabel}>成功率</Text>
-            </View>
-            <View style={styles.chainStat}>
-              <Text style={styles.chainStatValue}>
-                {chainData.auxChain.averageDuration}
-              </Text>
-              <Text style={styles.chainStatLabel}>平均时长</Text>
-            </View>
-          </View>
-          <ProgressBar
-            progress={
-              (chainData.auxChain.currentLength /
-                chainData.auxChain.bestLength) *
-              100
-            }
-            color={Colors.secondary}
-            style={styles.chainProgress}
-          />
-        </View>
-      </Card>
-
-      {/* 定式分析 */}
-      <Card style={styles.patternAnalysisCard}>
-        <Text style={styles.sectionTitle}>定式分析</Text>
-
-        <View style={styles.patternStats}>
-          <View style={styles.patternStat}>
-            <Text style={styles.patternStatValue}>
-              {patternData.totalPatterns}
-            </Text>
-            <Text style={styles.patternStatLabel}>总定式数</Text>
-          </View>
-          <View style={styles.patternStat}>
-            <Text style={styles.patternStatValue}>
-              {patternData.activePatterns}
-            </Text>
-            <Text style={styles.patternStatLabel}>活跃定式</Text>
-          </View>
-          <View style={styles.patternStat}>
-            <Text style={styles.patternStatValue}>
-              {patternData.reinforcedPatterns}
-            </Text>
-            <Text style={styles.patternStatLabel}>强化定式</Text>
-          </View>
-          <View style={styles.patternStat}>
-            <Text style={styles.patternStatValue}>
-              {patternData.successRate}%
-            </Text>
-            <Text style={styles.patternStatLabel}>成功率</Text>
-          </View>
-        </View>
-
-        <View style={styles.reinforcementAnalysis}>
-          <Text style={styles.analysisTitle}>强化等级分布</Text>
-          <View style={styles.reinforcementBars}>
-            <View style={styles.reinforcementBar}>
-              <Text style={styles.reinforcementLabel}>+0</Text>
-              <View style={styles.reinforcementBarContainer}>
-                <View
+                <Text
                   style={[
-                    styles.reinforcementBarFill,
-                    { width: "30%", backgroundColor: Colors.gray400 },
+                    styles.periodButtonText,
+                    selectedPeriod === period && styles.periodButtonTextActive,
                   ]}
-                />
-              </View>
-              <Text style={styles.reinforcementValue}>3</Text>
+                >
+                  {period === "week"
+                    ? "本周"
+                    : period === "month"
+                    ? "本月"
+                    : "本年"}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </Card>
+
+        {/* 总体统计 */}
+        <Card style={styles.overviewCard}>
+          <Text style={styles.sectionTitle}>{getPeriodText()}总体表现</Text>
+          <View style={styles.overviewGrid}>
+            <View style={styles.overviewItem}>
+              <Ionicons name="trending-up" size={24} color={Colors.primary} />
+              <Text style={styles.overviewValue}>{getTotalSessions()}</Text>
+              <Text style={styles.overviewLabel}>总专注次数</Text>
             </View>
-            <View style={styles.reinforcementBar}>
-              <Text style={styles.reinforcementLabel}>+1</Text>
-              <View style={styles.reinforcementBarContainer}>
-                <View
-                  style={[
-                    styles.reinforcementBarFill,
-                    { width: "50%", backgroundColor: Colors.success },
-                  ]}
-                />
-              </View>
-              <Text style={styles.reinforcementValue}>2</Text>
+            <View style={styles.overviewItem}>
+              <Ionicons
+                name="checkmark-circle"
+                size={24}
+                color={Colors.success}
+              />
+              <Text style={styles.overviewValue}>
+                {getOverallSuccessRate()}%
+              </Text>
+              <Text style={styles.overviewLabel}>成功率</Text>
             </View>
-            <View style={styles.reinforcementBar}>
-              <Text style={styles.reinforcementLabel}>+2</Text>
-              <View style={styles.reinforcementBarContainer}>
-                <View
-                  style={[
-                    styles.reinforcementBarFill,
-                    { width: "20%", backgroundColor: Colors.primary },
-                  ]}
-                />
-              </View>
-              <Text style={styles.reinforcementValue}>1</Text>
+            <View style={styles.overviewItem}>
+              <Ionicons name="time" size={24} color={Colors.secondary} />
+              <Text style={styles.overviewValue}>
+                {Math.round(
+                  (chainData.mainChain.averageDuration +
+                    chainData.auxChain.averageDuration) /
+                    2
+                )}
+              </Text>
+              <Text style={styles.overviewLabel}>平均时长(分)</Text>
+            </View>
+            <View style={styles.overviewItem}>
+              <Ionicons name="git-network" size={24} color={Colors.warning} />
+              <Text style={styles.overviewValue}>
+                {patternData.activePatterns}
+              </Text>
+              <Text style={styles.overviewLabel}>活跃定式</Text>
             </View>
           </View>
-        </View>
-      </Card>
+        </Card>
 
-      {/* 周度趋势 */}
-      <Card style={styles.trendCard}>
-        <Text style={styles.sectionTitle}>周度趋势</Text>
+        {/* 链状态分析 */}
+        <Card style={styles.chainAnalysisCard}>
+          <Text style={styles.sectionTitle}>链状态分析</Text>
 
-        <View style={styles.trendChart}>
-          {weeklyData.map((day, index) => {
-            const maxMainChain = getMaxValue(weeklyData, "mainChain");
-            const maxPatterns = getMaxValue(weeklyData, "patterns");
+          <View style={styles.chainSection}>
+            <View style={styles.chainHeader}>
+              <Text style={styles.chainTitle}>主链 (专注链)</Text>
+              <Badge
+                text={`#${chainData.mainChain.currentLength}`}
+                variant="primary"
+              />
+            </View>
+            <View style={styles.chainStats}>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.mainChain.totalSessions}
+                </Text>
+                <Text style={styles.chainStatLabel}>总次数</Text>
+              </View>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.mainChain.successRate}%
+                </Text>
+                <Text style={styles.chainStatLabel}>成功率</Text>
+              </View>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.mainChain.averageDuration}
+                </Text>
+                <Text style={styles.chainStatLabel}>平均时长</Text>
+              </View>
+            </View>
+            <ProgressBar
+              progress={
+                (chainData.mainChain.currentLength /
+                  chainData.mainChain.bestLength) *
+                100
+              }
+              color={Colors.primary}
+              style={styles.chainProgress}
+            />
+          </View>
 
-            return (
-              <View key={day.day} style={styles.trendDay}>
-                <View style={styles.trendBars}>
+          <View style={styles.chainSection}>
+            <View style={styles.chainHeader}>
+              <Text style={styles.chainTitle}>辅助链 (预约链)</Text>
+              <Badge
+                text={`#${chainData.auxChain.currentLength}`}
+                variant="secondary"
+              />
+            </View>
+            <View style={styles.chainStats}>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.auxChain.totalSessions}
+                </Text>
+                <Text style={styles.chainStatLabel}>总次数</Text>
+              </View>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.auxChain.successRate}%
+                </Text>
+                <Text style={styles.chainStatLabel}>成功率</Text>
+              </View>
+              <View style={styles.chainStat}>
+                <Text style={styles.chainStatValue}>
+                  {chainData.auxChain.averageDuration}
+                </Text>
+                <Text style={styles.chainStatLabel}>平均时长</Text>
+              </View>
+            </View>
+            <ProgressBar
+              progress={
+                (chainData.auxChain.currentLength /
+                  chainData.auxChain.bestLength) *
+                100
+              }
+              color={Colors.secondary}
+              style={styles.chainProgress}
+            />
+          </View>
+        </Card>
+
+        {/* 定式分析 */}
+        <Card style={styles.patternAnalysisCard}>
+          <Text style={styles.sectionTitle}>定式分析</Text>
+
+          <View style={styles.patternStats}>
+            <View style={styles.patternStat}>
+              <Text style={styles.patternStatValue}>
+                {patternData.totalPatterns}
+              </Text>
+              <Text style={styles.patternStatLabel}>总定式数</Text>
+            </View>
+            <View style={styles.patternStat}>
+              <Text style={styles.patternStatValue}>
+                {patternData.activePatterns}
+              </Text>
+              <Text style={styles.patternStatLabel}>活跃定式</Text>
+            </View>
+            <View style={styles.patternStat}>
+              <Text style={styles.patternStatValue}>
+                {patternData.reinforcedPatterns}
+              </Text>
+              <Text style={styles.patternStatLabel}>强化定式</Text>
+            </View>
+            <View style={styles.patternStat}>
+              <Text style={styles.patternStatValue}>
+                {patternData.successRate}%
+              </Text>
+              <Text style={styles.patternStatLabel}>成功率</Text>
+            </View>
+          </View>
+
+          <View style={styles.reinforcementAnalysis}>
+            <Text style={styles.analysisTitle}>强化等级分布</Text>
+            <View style={styles.reinforcementBars}>
+              <View style={styles.reinforcementBar}>
+                <Text style={styles.reinforcementLabel}>+0</Text>
+                <View style={styles.reinforcementBarContainer}>
                   <View
                     style={[
-                      styles.trendBar,
-                      {
-                        height: (day.mainChain / maxMainChain) * 60,
-                        backgroundColor: Colors.primary,
-                      },
-                    ]}
-                  />
-                  <View
-                    style={[
-                      styles.trendBar,
-                      {
-                        height: (day.patterns / maxPatterns) * 60,
-                        backgroundColor: Colors.secondary,
-                      },
+                      styles.reinforcementBarFill,
+                      { width: "30%", backgroundColor: Colors.gray400 },
                     ]}
                   />
                 </View>
-                <Text style={styles.trendDayLabel}>{day.day}</Text>
-                <View style={styles.trendMood}>
-                  <Ionicons
-                    name={
-                      day.mood >= 7
-                        ? "happy"
-                        : day.mood >= 5
-                        ? "sad"
-                        : "sad-outline"
-                    }
-                    size={12}
-                    color={
-                      day.mood >= 7
-                        ? Colors.success
-                        : day.mood >= 5
-                        ? Colors.warning
-                        : Colors.danger
-                    }
+                <Text style={styles.reinforcementValue}>3</Text>
+              </View>
+              <View style={styles.reinforcementBar}>
+                <Text style={styles.reinforcementLabel}>+1</Text>
+                <View style={styles.reinforcementBarContainer}>
+                  <View
+                    style={[
+                      styles.reinforcementBarFill,
+                      { width: "50%", backgroundColor: Colors.success },
+                    ]}
                   />
                 </View>
+                <Text style={styles.reinforcementValue}>2</Text>
               </View>
-            );
-          })}
-        </View>
-
-        <View style={styles.trendLegend}>
-          <View style={styles.legendItem}>
-            <View
-              style={[styles.legendColor, { backgroundColor: Colors.primary }]}
-            />
-            <Text style={styles.legendText}>主链次数</Text>
-          </View>
-          <View style={styles.legendItem}>
-            <View
-              style={[
-                styles.legendColor,
-                { backgroundColor: Colors.secondary },
-              ]}
-            />
-            <Text style={styles.legendText}>定式完成</Text>
-          </View>
-        </View>
-      </Card>
-
-      {/* 稳态雷达 */}
-      <Card style={styles.radarCard}>
-        <Text style={styles.sectionTitle}>稳态雷达</Text>
-
-        <View style={styles.radarMetrics}>
-          <View style={styles.radarItem}>
-            <Text style={styles.radarLabel}>睡眠质量</Text>
-            <View style={styles.radarBar}>
-              <View
-                style={[styles.radarFill, { width: `${metrics.sleepScore}%` }]}
-              />
+              <View style={styles.reinforcementBar}>
+                <Text style={styles.reinforcementLabel}>+2</Text>
+                <View style={styles.reinforcementBarContainer}>
+                  <View
+                    style={[
+                      styles.reinforcementBarFill,
+                      { width: "20%", backgroundColor: Colors.primary },
+                    ]}
+                  />
+                </View>
+                <Text style={styles.reinforcementValue}>1</Text>
+              </View>
             </View>
-            <Text style={styles.radarValue}>{metrics.sleepScore}%</Text>
           </View>
-          <View style={styles.radarItem}>
-            <Text style={styles.radarLabel}>精力状态</Text>
-            <View style={styles.radarBar}>
-              <View
-                style={[styles.radarFill, { width: `${metrics.energyScore}%` }]}
-              />
-            </View>
-            <Text style={styles.radarValue}>{metrics.energyScore}%</Text>
+        </Card>
+
+        {/* 周度趋势 */}
+        <Card style={styles.trendCard}>
+          <Text style={styles.sectionTitle}>周度趋势</Text>
+
+          <View style={styles.trendChart}>
+            {weeklyData.map((day, index) => {
+              const maxMainChain = getMaxValue(weeklyData, "mainChain");
+              const maxPatterns = getMaxValue(weeklyData, "patterns");
+
+              return (
+                <View key={day.day} style={styles.trendDay}>
+                  <View style={styles.trendBars}>
+                    <View
+                      style={[
+                        styles.trendBar,
+                        {
+                          height: (day.mainChain / maxMainChain) * 60,
+                          backgroundColor: Colors.primary,
+                        },
+                      ]}
+                    />
+                    <View
+                      style={[
+                        styles.trendBar,
+                        {
+                          height: (day.patterns / maxPatterns) * 60,
+                          backgroundColor: Colors.secondary,
+                        },
+                      ]}
+                    />
+                  </View>
+                  <Text style={styles.trendDayLabel}>{day.day}</Text>
+                  <View style={styles.trendMood}>
+                    <Ionicons
+                      name={
+                        day.mood >= 7
+                          ? "happy"
+                          : day.mood >= 5
+                          ? "sad"
+                          : "sad-outline"
+                      }
+                      size={12}
+                      color={
+                        day.mood >= 7
+                          ? Colors.success
+                          : day.mood >= 5
+                          ? Colors.warning
+                          : Colors.danger
+                      }
+                    />
+                  </View>
+                </View>
+              );
+            })}
           </View>
-          <View style={styles.radarItem}>
-            <Text style={styles.radarLabel}>手机控制</Text>
-            <View style={styles.radarBar}>
+
+          <View style={styles.trendLegend}>
+            <View style={styles.legendItem}>
               <View
                 style={[
-                  styles.radarFill,
-                  { width: `${100 - metrics.phoneUsage}%` },
+                  styles.legendColor,
+                  { backgroundColor: Colors.primary },
                 ]}
               />
+              <Text style={styles.legendText}>主链次数</Text>
             </View>
-            <Text style={styles.radarValue}>{100 - metrics.phoneUsage}%</Text>
-          </View>
-          <View style={styles.radarItem}>
-            <Text style={styles.radarLabel}>任务进度</Text>
-            <View style={styles.radarBar}>
+            <View style={styles.legendItem}>
               <View
                 style={[
-                  styles.radarFill,
-                  { width: `${metrics.taskProgress}%` },
+                  styles.legendColor,
+                  { backgroundColor: Colors.secondary },
                 ]}
               />
+              <Text style={styles.legendText}>定式完成</Text>
             </View>
-            <Text style={styles.radarValue}>{metrics.taskProgress}%</Text>
           </View>
-          <View style={styles.radarItem}>
-            <Text style={styles.radarLabel}>情绪状态</Text>
-            <View style={styles.radarBar}>
-              <View
-                style={[styles.radarFill, { width: `${metrics.moodScore}%` }]}
-              />
+        </Card>
+
+        {/* 稳态雷达 */}
+        <Card style={styles.radarCard}>
+          <Text style={styles.sectionTitle}>稳态雷达</Text>
+
+          <View style={styles.radarMetrics}>
+            <View style={styles.radarItem}>
+              <Text style={styles.radarLabel}>睡眠质量</Text>
+              <View style={styles.radarBar}>
+                <View
+                  style={[
+                    styles.radarFill,
+                    { width: `${metrics.sleepScore}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.radarValue}>{metrics.sleepScore}%</Text>
             </View>
-            <Text style={styles.radarValue}>{metrics.moodScore}%</Text>
+            <View style={styles.radarItem}>
+              <Text style={styles.radarLabel}>精力状态</Text>
+              <View style={styles.radarBar}>
+                <View
+                  style={[
+                    styles.radarFill,
+                    { width: `${metrics.energyScore}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.radarValue}>{metrics.energyScore}%</Text>
+            </View>
+            <View style={styles.radarItem}>
+              <Text style={styles.radarLabel}>手机控制</Text>
+              <View style={styles.radarBar}>
+                <View
+                  style={[
+                    styles.radarFill,
+                    { width: `${100 - metrics.phoneUsage}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.radarValue}>{100 - metrics.phoneUsage}%</Text>
+            </View>
+            <View style={styles.radarItem}>
+              <Text style={styles.radarLabel}>任务进度</Text>
+              <View style={styles.radarBar}>
+                <View
+                  style={[
+                    styles.radarFill,
+                    { width: `${metrics.taskProgress}%` },
+                  ]}
+                />
+              </View>
+              <Text style={styles.radarValue}>{metrics.taskProgress}%</Text>
+            </View>
+            <View style={styles.radarItem}>
+              <Text style={styles.radarLabel}>情绪状态</Text>
+              <View style={styles.radarBar}>
+                <View
+                  style={[styles.radarFill, { width: `${metrics.moodScore}%` }]}
+                />
+              </View>
+              <Text style={styles.radarValue}>{metrics.moodScore}%</Text>
+            </View>
           </View>
-        </View>
-      </Card>
+        </Card>
 
-      {/* 洞察建议 */}
-      <Card style={styles.insightsCard}>
-        <Text style={styles.sectionTitle}>洞察与建议</Text>
+        {/* 洞察建议 */}
+        <Card style={styles.insightsCard}>
+          <Text style={styles.sectionTitle}>洞察与建议</Text>
 
-        <View style={styles.insightsList}>
-          <View style={styles.insightItem}>
-            <Ionicons name="trending-up" size={20} color={Colors.success} />
-            <Text style={styles.insightText}>
-              主链成功率78%，表现良好，建议继续保持
-            </Text>
+          <View style={styles.insightsList}>
+            <View style={styles.insightItem}>
+              <Ionicons name="trending-up" size={20} color={Colors.success} />
+              <Text style={styles.insightText}>
+                主链成功率78%，表现良好，建议继续保持
+              </Text>
+            </View>
+            <View style={styles.insightItem}>
+              <Ionicons name="warning" size={20} color={Colors.warning} />
+              <Text style={styles.insightText}>
+                辅助链成功率65%，建议优化预约机制
+              </Text>
+            </View>
+            <View style={styles.insightItem}>
+              <Ionicons name="bulb" size={20} color={Colors.primary} />
+              <Text style={styles.insightText}>
+                定式成功率72%，可考虑添加更多强化定式
+              </Text>
+            </View>
+            <View style={styles.insightItem}>
+              <Ionicons name="phone-portrait" size={20} color={Colors.danger} />
+              <Text style={styles.insightText}>
+                手机使用时间偏高，建议加强数字戒断定式
+              </Text>
+            </View>
           </View>
-          <View style={styles.insightItem}>
-            <Ionicons name="warning" size={20} color={Colors.warning} />
-            <Text style={styles.insightText}>
-              辅助链成功率65%，建议优化预约机制
-            </Text>
-          </View>
-          <View style={styles.insightItem}>
-            <Ionicons name="bulb" size={20} color={Colors.primary} />
-            <Text style={styles.insightText}>
-              定式成功率72%，可考虑添加更多强化定式
-            </Text>
-          </View>
-          <View style={styles.insightItem}>
-            <Ionicons name="phone-portrait" size={20} color={Colors.danger} />
-            <Text style={styles.insightText}>
-              手机使用时间偏高，建议加强数字戒断定式
-            </Text>
-          </View>
-        </View>
-      </Card>
+        </Card>
 
-      <View style={styles.bottomSpacer} />
-    </ScrollView>
+        <View style={styles.bottomSpacer} />
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
