@@ -63,7 +63,7 @@ export default function RootLayout() {
     };
 
     const name = map[route.key] ?? "ellipse";
-    return <Ionicons name={name as any} size={24} color={color} />;
+    return <Ionicons name={name as any} size={22} color={color} />;
   };
 
   return (
