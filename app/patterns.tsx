@@ -1,11 +1,5 @@
-import {
-  BorderRadius,
-  Button,
-  Card,
-  Colors,
-  FontSizes,
-  Spacing,
-} from "@/components/DesignSystem";
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
 import {
   Pattern,
   PatternTemplate,
@@ -13,6 +7,10 @@ import {
   PatternTree,
   SteadyStateAnalysis,
 } from "@/components/RSIPComponents";
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {

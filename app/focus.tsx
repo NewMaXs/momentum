@@ -1,14 +1,12 @@
-import {
-  Badge,
-  BorderRadius,
-  Button,
-  Card,
-  Colors,
-  FontSizes,
-  Spacing,
-} from "@/components/DesignSystem";
+import { Badge } from "@/components/Badge";
+import { Button } from "@/components/Button";
+import { Card } from "@/components/Card";
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Alert, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -18,6 +16,31 @@ export default function FocusScreen() {
   const [targetTime, setTargetTime] = useState(60 * 60); // 60分钟
   const [violations, setViolations] = useState<string[]>([]);
   const [currentChainLength, setCurrentChainLength] = useState(12);
+
+  const handleCompleteFocus = useCallback(() => {
+    setIsFocusing(false);
+    setCurrentChainLength((prev) => prev + 1);
+
+    Alert.alert(
+      "专注完成！",
+      `恭喜你完成了 ${formatTime(focusTime)} 的专注时间！\n\n链长度已更新为 #${
+        currentChainLength + 1
+      }`,
+      [
+        {
+          text: "继续专注",
+          onPress: () => {
+            setFocusTime(0);
+            setIsFocusing(true);
+          },
+        },
+        {
+          text: "结束",
+          style: "default",
+        },
+      ]
+    );
+  }, [focusTime, currentChainLength]);
 
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
@@ -39,7 +62,7 @@ export default function FocusScreen() {
     return () => {
       if (interval) clearInterval(interval);
     };
-  }, [isFocusing, targetTime]);
+  }, [isFocusing, targetTime, handleCompleteFocus]);
 
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -66,35 +89,6 @@ export default function FocusScreen() {
 
   const handlePauseFocus = () => {
     setIsFocusing(false);
-  };
-
-  const handleResumeFocus = () => {
-    setIsFocusing(true);
-  };
-
-  const handleCompleteFocus = () => {
-    setIsFocusing(false);
-    setCurrentChainLength((prev) => prev + 1);
-
-    Alert.alert(
-      "专注完成！",
-      `恭喜你完成了 ${formatTime(focusTime)} 的专注时间！\n\n链长度已更新为 #${
-        currentChainLength + 1
-      }`,
-      [
-        {
-          text: "继续专注",
-          onPress: () => {
-            setFocusTime(0);
-            setIsFocusing(true);
-          },
-        },
-        {
-          text: "结束",
-          style: "default",
-        },
-      ]
-    );
   };
 
   const handleReportViolation = () => {

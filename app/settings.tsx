@@ -1,10 +1,8 @@
-import {
-  BorderRadius,
-  Card,
-  Colors,
-  FontSizes,
-  Spacing,
-} from "@/components/DesignSystem";
+import { Card } from "@/components/Card";
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {

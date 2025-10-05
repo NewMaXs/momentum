@@ -1,3 +1,8 @@
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Shadows } from "@/constants/shadows";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {
@@ -8,16 +13,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import {
-  Badge,
-  BorderRadius,
-  Button,
-  Card,
-  Colors,
-  FontSizes,
-  Shadows,
-  Spacing,
-} from "./DesignSystem";
+import { Badge } from "./Badge";
+import { Button } from "./Button";
+import { Card } from "./Card";
 
 // 定式类型定义
 export interface Pattern {
@@ -40,7 +38,8 @@ export interface Pattern {
 // 定式树节点组件
 interface PatternTreeNodeProps {
   pattern: Pattern;
-  children: Pattern[];
+  subPatterns?: Pattern[];
+  childrenMap?: Record<string, Pattern[]>;
   onAddChild: (parentId: string) => void;
   onRemove: (patternId: string) => void;
   onReinforce: (patternId: string) => void;
@@ -50,7 +49,8 @@ interface PatternTreeNodeProps {
 
 export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
   pattern,
-  children,
+  subPatterns = [],
+  childrenMap,
   onAddChild,
   onRemove,
   onReinforce,
@@ -74,12 +74,7 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
     );
   };
 
-  const getReinforcementColor = () => {
-    if (pattern.reinforcement === 0) return Colors.gray400;
-    if (pattern.reinforcement <= 2) return Colors.success;
-    if (pattern.reinforcement <= 5) return Colors.primary;
-    return Colors.warning;
-  };
+  // getReinforcementColor removed (unused)
 
   return (
     <View style={[styles.treeNode, { marginLeft: level * Spacing.lg }]}>
@@ -170,13 +165,14 @@ export const PatternTreeNode: React.FC<PatternTreeNodeProps> = ({
         )}
       </View>
 
-      {isExpanded && children.length > 0 && (
+      {isExpanded && subPatterns.length > 0 && (
         <View style={styles.childrenContainer}>
-          {children.map((child) => (
+          {subPatterns.map((child) => (
             <PatternTreeNode
               key={child.id}
               pattern={child}
-              children={[]} // 这里应该递归获取子节点
+              subPatterns={childrenMap?.[child.id] || []}
+              childrenMap={childrenMap}
               onAddChild={onAddChild}
               onRemove={onRemove}
               onReinforce={onReinforce}
@@ -266,7 +262,8 @@ export const PatternTree: React.FC<PatternTreeProps> = ({
               <PatternTreeNode
                 key={pattern.id}
                 pattern={pattern}
-                children={children[pattern.id] || []}
+                subPatterns={children[pattern.id] || []}
+                childrenMap={children}
                 onAddChild={onAddPattern}
                 onRemove={onRemovePattern}
                 onReinforce={onReinforcePattern}
