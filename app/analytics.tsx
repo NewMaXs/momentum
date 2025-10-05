@@ -1,12 +1,10 @@
-import {
-  Badge,
-  BorderRadius,
-  Card,
-  Colors,
-  FontSizes,
-  ProgressBar,
-  Spacing,
-} from "@/components/DesignSystem";
+import { Badge } from "@/components/Badge";
+import { Card } from "@/components/Card";
+import { ProgressBar } from "@/components/ProgressBar";
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import {

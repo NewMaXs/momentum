@@ -1,3 +1,5 @@
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -67,7 +69,27 @@ export default function RootLayout() {
   };
 
   return (
-    <PaperProvider theme={MD3LightTheme}>
+    <PaperProvider
+      theme={
+        {
+          ...MD3LightTheme,
+          colors: {
+            ...MD3LightTheme.colors,
+            primary: Colors.primary,
+            onPrimary: Colors.textInverse,
+            secondary: Colors.secondary,
+            background: Colors.background,
+            surface: Colors.background,
+            surfaceVariant: Colors.backgroundSecondary,
+            outline: Colors.gray200,
+            inverseOnSurface: Colors.textInverse,
+            onSurface: Colors.textPrimary,
+            secondaryContainer: Colors.secondaryLight,
+          },
+          roundness: BorderRadius.md,
+        } as typeof MD3LightTheme
+      }
+    >
       <StatusBar style="auto" />
       <BottomNavigation
         navigationState={{ index, routes }}
@@ -77,19 +99,17 @@ export default function RootLayout() {
         sceneAnimationEnabled={true}
         labeled={true}
         renderIcon={renderIcon}
-        activeColor="#6366f1"
-        inactiveColor="#6b7280"
+        activeColor={Colors.primary}
+        inactiveColor={Colors.gray500}
         barStyle={{
-          backgroundColor: "#ffffff",
+          backgroundColor: Colors.background,
           borderTopWidth: 1,
-          borderTopColor: "#e5e7eb",
+          borderTopColor: Colors.gray200,
           height: 80,
           paddingTop: 10,
           paddingBottom: 10,
         }}
-        activeIndicatorStyle={{
-          backgroundColor: "#a5b4fc",
-        }}
+        activeIndicatorStyle={{ backgroundColor: Colors.primaryLight }}
       />
     </PaperProvider>
   );

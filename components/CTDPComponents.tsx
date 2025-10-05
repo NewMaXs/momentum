@@ -1,16 +1,14 @@
+import { BorderRadius } from "@/constants/borderRadius";
+import { Colors } from "@/constants/colors";
+import { FontSizes } from "@/constants/fontSize";
+import { Spacing } from "@/constants/spacing";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { Alert, StyleSheet, Text, View } from "react-native";
-import {
-  Badge,
-  BorderRadius,
-  Button,
-  Card,
-  Colors,
-  FontSizes,
-  ProgressBar,
-  Spacing,
-} from "./DesignSystem";
+import { Badge } from "./Badge";
+import { Button } from "./Button";
+import { Card } from "./Card";
+import { ProgressBar } from "./ProgressBar";
 
 // 链状态类型
 export type ChainType = "MAIN" | "AUX";
@@ -44,7 +42,7 @@ export const MainChain: React.FC<MainChainProps> = ({
   onTrigger,
   onViolation,
 }) => {
-  const [isActive, setIsActive] = useState(false);
+  const [_isActive, setIsActive] = useState(false);
 
   const handleTrigger = () => {
     setIsActive(true);
