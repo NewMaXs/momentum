@@ -1,5 +1,8 @@
-import { BorderRadius } from "@/constants/borderRadius";
-import { Colors } from "@/constants/colors";
+import AnalyticsScreen from "@/tab/analytics";
+import FocusScreen from "@/tab/focus";
+import Dashboard from "@/tab/index";
+import PatternsScreen from "@/tab/patterns";
+import SettingsScreen from "@/tab/settings";
 import { Ionicons } from "@expo/vector-icons";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
@@ -8,11 +11,6 @@ import {
   MD3LightTheme,
   PaperProvider,
 } from "react-native-paper";
-import AnalyticsScreen from "./analytics";
-import FocusScreen from "./focus";
-import Dashboard from "./index";
-import PatternsScreen from "./patterns";
-import SettingsScreen from "./settings";
 
 const routeTitles: Record<string, string> = {
   index: "仪表盘",
@@ -28,7 +26,7 @@ const PatternsRoute = () => <PatternsScreen />;
 const AnalyticsRoute = () => <AnalyticsScreen />;
 const SettingsRoute = () => <SettingsScreen />;
 
-export default function RootLayout() {
+export default function App() {
   const [index, setIndex] = React.useState(0);
 
   const [routes] = React.useState([
@@ -75,18 +73,7 @@ export default function RootLayout() {
           ...MD3LightTheme,
           colors: {
             ...MD3LightTheme.colors,
-            primary: Colors.primary,
-            onPrimary: Colors.textInverse,
-            secondary: Colors.secondary,
-            background: Colors.background,
-            surface: Colors.background,
-            surfaceVariant: Colors.backgroundSecondary,
-            outline: Colors.gray200,
-            inverseOnSurface: Colors.textInverse,
-            onSurface: Colors.textPrimary,
-            secondaryContainer: Colors.secondaryLight,
           },
-          roundness: BorderRadius.md,
         } as typeof MD3LightTheme
       }
     >
@@ -99,17 +86,6 @@ export default function RootLayout() {
         sceneAnimationEnabled={true}
         labeled={true}
         renderIcon={renderIcon}
-        activeColor={Colors.primary}
-        inactiveColor={Colors.gray500}
-        barStyle={{
-          backgroundColor: Colors.background,
-          borderTopWidth: 1,
-          borderTopColor: Colors.gray200,
-          height: 80,
-          paddingTop: 10,
-          paddingBottom: 10,
-        }}
-        activeIndicatorStyle={{ backgroundColor: Colors.primaryLight }}
       />
     </PaperProvider>
   );
