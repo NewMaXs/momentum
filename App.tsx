@@ -1,5 +1,5 @@
 import { ThemeContext } from "@/context/ThemeContext";
-import MainNavigator from "@/navigation/MainNavigator";
+import BottomNavigator from "@/navigation/BottomNavigator";
 import { useMaterial3Theme } from "@pchmn/expo-material3-theme";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { StatusBar } from "expo-status-bar";
@@ -112,7 +112,7 @@ export default function App() {
       <StatusBar style={isDark ? "light" : "dark"} />
 
       <ThemeContext.Provider value={{ themeMode, setThemeMode }}>
-        <MainNavigator themeMode={themeMode} onThemeChange={setThemeMode} />
+        <BottomNavigator themeMode={themeMode} onThemeChange={setThemeMode} />
       </ThemeContext.Provider>
 
       {showSplash && (

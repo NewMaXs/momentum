@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
+  Appbar,
   Button,
-  Card,
-  Divider,
   List,
   Menu,
+  TouchableRipple,
   useTheme,
 } from "react-native-paper";
-import { SafeAreaView } from "react-native-safe-area-context";
 
 interface SettingsScreenProps {
   themeMode: "system" | "light" | "dark";
@@ -31,19 +30,32 @@ export default function SettingsScreen({
   }, [menuVisible]);
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: theme.colors.background,
-        padding: 16,
-      }}
-    >
-      <Card mode="contained" style={{ borderRadius: 16 }}>
-        <Card.Title title="外观" titleVariant="titleMedium" />
-        <Divider />
-        <Card.Content>
+    <>
+      <Appbar.Header elevated={true}>
+        <Appbar.Content title="设置" />
+        <Appbar.Action icon="magnify" onPress={() => {}} />
+      </Appbar.Header>
+      <List.Section>
+        <List.Subheader style={{ color: theme.colors.primary }}>
+          外观
+        </List.Subheader>
+        <TouchableRipple
+          onPress={() => setMenuVisible(true)}
+          rippleColor={theme.colors.onBackground + "22"}
+        >
           <List.Item
-            title="主题模式"
+            title="颜色模式"
+            left={() => (
+              <List.Icon
+                icon={
+                  themeMode === "system"
+                    ? "theme-light-dark"
+                    : themeMode === "light"
+                    ? "white-balance-sunny"
+                    : "moon-waxing-crescent"
+                }
+              />
+            )}
             right={() => (
               <Menu
                 key={menuKey} // 每次关闭后强制重新挂载
@@ -69,6 +81,11 @@ export default function SettingsScreen({
                     setMenuVisible(false);
                   }}
                   title="系统"
+                  rippleColor={
+                    themeMode === "system"
+                      ? theme.colors.primary + "22"
+                      : theme.colors.onBackground + "22"
+                  }
                 />
                 <Menu.Item
                   onPress={() => {
@@ -76,6 +93,11 @@ export default function SettingsScreen({
                     setMenuVisible(false);
                   }}
                   title="浅色"
+                  rippleColor={
+                    themeMode === "light"
+                      ? theme.colors.primary + "22"
+                      : theme.colors.onBackground + "22"
+                  }
                 />
                 <Menu.Item
                   onPress={() => {
@@ -83,12 +105,17 @@ export default function SettingsScreen({
                     setMenuVisible(false);
                   }}
                   title="深色"
+                  rippleColor={
+                    themeMode === "dark"
+                      ? theme.colors.primary + "22"
+                      : theme.colors.onBackground + "22"
+                  }
                 />
               </Menu>
             )}
           />
-        </Card.Content>
-      </Card>
-    </SafeAreaView>
+        </TouchableRipple>
+      </List.Section>
+    </>
   );
 }

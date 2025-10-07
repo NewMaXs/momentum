@@ -1,8 +1,8 @@
-import AnalyticsScreen from "@/tabs/analytics";
-import FocusScreen from "@/tabs/focus";
-import Dashboard from "@/tabs/index";
-import PatternsScreen from "@/tabs/patterns";
-import SettingsScreen from "@/tabs/settings";
+import AnalyticsScreen from "@/navigation/BottomNavigatorTabs/analytics";
+import FocusScreen from "@/navigation/BottomNavigatorTabs/focus";
+import Dashboard from "@/navigation/BottomNavigatorTabs/index";
+import PatternsScreen from "@/navigation/BottomNavigatorTabs/patterns";
+import SettingsScreen from "@/navigation/BottomNavigatorTabs/settings";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useState } from "react";
 import { BottomNavigation } from "react-native-paper";
@@ -15,15 +15,15 @@ const routeTitles = {
   settings: "设置",
 };
 
-interface MainNavigatorProps {
+interface BottomNavigatorProps {
   themeMode: "system" | "light" | "dark";
   onThemeChange: (mode: "system" | "light" | "dark") => void;
 }
 
-export default function MainNavigator({
+export default function BottomNavigator({
   themeMode,
   onThemeChange,
-}: MainNavigatorProps) {
+}: BottomNavigatorProps) {
   const [index, setIndex] = useState(0);
 
   const routes = [
