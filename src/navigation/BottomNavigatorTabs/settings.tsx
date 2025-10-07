@@ -36,7 +36,9 @@ export default function SettingsScreen({
         <Appbar.Action icon="magnify" onPress={() => {}} />
       </Appbar.Header>
       <List.Section>
-        <List.Subheader style={{ color: theme.colors.primary }}>
+        <List.Subheader
+          style={{ color: theme.colors.primary, paddingHorizontal: 32 }}
+        >
           外观
         </List.Subheader>
         <TouchableRipple
@@ -44,6 +46,7 @@ export default function SettingsScreen({
           rippleColor={theme.colors.onBackground + "22"}
         >
           <List.Item
+            style={{ paddingHorizontal: 16 }}
             title="颜色模式"
             left={() => (
               <List.Icon
