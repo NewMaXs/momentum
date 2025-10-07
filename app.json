@@ -4,11 +4,11 @@
     "slug": "momentum",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/image/icon.png",
+    "icon": "./src/assets/image/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/image/splash-icon.png",
+      "image": "./src/assets/image/splash-icon.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -17,14 +17,14 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/image/adaptive-icon.png",
+        "foregroundImage": "./src/assets/image/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
     "web": {
-      "favicon": "./assets/image/favicon.png"
+      "favicon": "./src/assets/image/favicon.png"
     }
   }
 }
