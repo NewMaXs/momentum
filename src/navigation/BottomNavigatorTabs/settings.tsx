@@ -1,124 +1,114 @@
-import React, { useEffect, useState } from "react";
-import {
-  Appbar,
-  Button,
-  List,
-  Menu,
-  TouchableRipple,
-  useTheme,
-} from "react-native-paper";
+import { useThemeContext } from "@/context/ThemeContext";
+import SelectionDialog, { SelectionOption } from "@/components/SelectionDialog";
+import React, { useState } from "react";
+import { ScrollView, StyleSheet } from "react-native";
+import { List, TouchableRipple, useTheme } from "react-native-paper";
 
-interface SettingsScreenProps {
-  themeMode: "system" | "light" | "dark";
-  onThemeChange: (mode: "system" | "light" | "dark") => void;
-}
-
-export default function SettingsScreen({
-  themeMode,
-  onThemeChange,
-}: SettingsScreenProps) {
-  const [menuVisible, setMenuVisible] = useState(false);
-  const [menuKey, setMenuKey] = useState(0); // 强制重置 Menu 状态
+export default function SettingsScreen() {
+  const { themeMode, setThemeMode } = useThemeContext();
+  const [dialogVisible, setDialogVisible] = useState(false);
   const theme = useTheme();
 
-  // 当菜单关闭时强制刷新 key，重置状态（防止动画卡死）
-  useEffect(() => {
-    if (!menuVisible) {
-      const t = setTimeout(() => setMenuKey((k) => k + 1), 300);
-      return () => clearTimeout(t);
+  const getThemeModeIcon = () => {
+    switch (themeMode) {
+      case "system":
+        return "theme-light-dark";
+      case "light":
+        return "white-balance-sunny";
+      case "dark":
+        return "moon-waxing-crescent";
     }
-  }, [menuVisible]);
+  };
+
+  const getThemeModeLabel = () => {
+    switch (themeMode) {
+      case "system":
+        return "系统";
+      case "light":
+        return "浅色";
+      case "dark":
+        return "深色";
+    }
+  };
+
+  const themeOptions: SelectionOption[] = [
+    {
+      value: "system",
+      label: "系统",
+      description: "跟随系统明暗主题",
+      icon: "theme-light-dark",
+    },
+    {
+      value: "light",
+      label: "浅色",
+      description: "始终使用浅色主题",
+      icon: "white-balance-sunny",
+    },
+    {
+      value: "dark",
+      label: "深色",
+      description: "始终使用深色主题",
+      icon: "moon-waxing-crescent",
+    },
+  ];
+
+  const handleThemeModeChange = (value: string) => {
+    setThemeMode(value as "system" | "light" | "dark");
+  };
 
   return (
     <>
-      <Appbar.Header elevated={true}>
-        <Appbar.Content title="设置" />
-        <Appbar.Action icon="magnify" onPress={() => {}} />
-      </Appbar.Header>
-      <List.Section>
-        <List.Subheader
-          style={{ color: theme.colors.primary, paddingHorizontal: 32 }}
-        >
-          外观
-        </List.Subheader>
-        <TouchableRipple
-          onPress={() => setMenuVisible(true)}
-          rippleColor={theme.colors.onBackground + "22"}
-        >
+      <ScrollView style={styles.container}>
+        <List.Section>
+          <List.Subheader style={{ color: theme.colors.primary }}>
+            外观设置
+          </List.Subheader>
+
+          {/* 颜色模式选择 */}
+          <TouchableRipple
+            onPress={() => setDialogVisible(true)}
+            rippleColor={theme.colors.surfaceVariant}
+          >
+            <List.Item
+              title="颜色模式"
+              description={getThemeModeLabel()}
+              left={(props) => (
+                <List.Icon {...props} icon={getThemeModeIcon()} />
+              )}
+            />
+          </TouchableRipple>
+        </List.Section>
+
+        {/* 关于部分 */}
+        <List.Section>
+          <List.Subheader style={{ color: theme.colors.primary }}>
+            关于
+          </List.Subheader>
           <List.Item
-            style={{ paddingHorizontal: 16 }}
-            title="颜色模式"
-            left={() => (
-              <List.Icon
-                icon={
-                  themeMode === "system"
-                    ? "theme-light-dark"
-                    : themeMode === "light"
-                    ? "white-balance-sunny"
-                    : "moon-waxing-crescent"
-                }
-              />
-            )}
-            right={() => (
-              <Menu
-                key={menuKey} // 每次关闭后强制重新挂载
-                visible={menuVisible}
-                onDismiss={() => setMenuVisible(false)}
-                anchor={
-                  <Button
-                    mode="text"
-                    onPress={() => setMenuVisible(true)}
-                    icon="chevron-down"
-                  >
-                    {themeMode === "system"
-                      ? "系统"
-                      : themeMode === "light"
-                      ? "浅色"
-                      : "深色"}
-                  </Button>
-                }
-              >
-                <Menu.Item
-                  onPress={() => {
-                    onThemeChange("system");
-                    setMenuVisible(false);
-                  }}
-                  title="系统"
-                  rippleColor={
-                    themeMode === "system"
-                      ? theme.colors.primary + "22"
-                      : theme.colors.onBackground + "22"
-                  }
-                />
-                <Menu.Item
-                  onPress={() => {
-                    onThemeChange("light");
-                    setMenuVisible(false);
-                  }}
-                  title="浅色"
-                  rippleColor={
-                    themeMode === "light"
-                      ? theme.colors.primary + "22"
-                      : theme.colors.onBackground + "22"
-                  }
-                />
-                <Menu.Item
-                  onPress={() => {
-                    onThemeChange("dark");
-                    setMenuVisible(false);
-                  }}
-                  title="深色"
-                  rippleColor={
-                    themeMode === "dark"
-                      ? theme.colors.primary + "22"
-                      : theme.colors.onBackground + "22"
-                  }
-                />
-              </Menu>
+            title="版本"
+            description="1.0.0"
+            left={(props) => (
+              <List.Icon {...props} icon="information-outline" />
             )}
           />
-        </TouchableRipple>
-      </List.Section>
+        </List.Section>
+      </ScrollView>
+
+      {/* 主题选择对话框 */}
+      <SelectionDialog
+        visible={dialogVisible}
+        onDismiss={() => setDialogVisible(false)}
+        title="选择颜色模式"
+        options={themeOptions}
+        selectedValue={themeMode}
+        onSelect={handleThemeModeChange}
+      />
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
