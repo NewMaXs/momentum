@@ -1,118 +1,116 @@
-import { ThemeContext } from "@/context/ThemeContext";
+import SplashScreen from "@/components/SplashScreen";
+import { ThemeContext, ThemeContextValue } from "@/context/ThemeContext";
 import { useAppTheme } from "@/hooks/useAppTheme";
 import BottomNavigator from "@/navigation/BottomNavigator";
 import { StatusBar } from "expo-status-bar";
 import * as React from "react";
-import { Animated, Easing, Image, StyleSheet, Text } from "react-native";
-import { ActivityIndicator, PaperProvider } from "react-native-paper";
+import { Animated, Easing } from "react-native";
+import { PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 
+// ==================== 常量配置 ====================
+
+/** 动画配置常量 */
+const ANIMATION_CONFIG = {
+  /** Logo 缩放动画持续时间（毫秒） */
+  SCALE_DURATION: 500,
+  /** Splash 停留时间（毫秒） */
+  DELAY_DURATION: 800,
+  /** 淡出动画持续时间（毫秒） */
+  FADE_DURATION: 600,
+  /** 初始缩放值 */
+  INITIAL_SCALE: 0.9,
+  /** 最终缩放值 */
+  FINAL_SCALE: 1,
+  /** 初始透明度 */
+  INITIAL_OPACITY: 1,
+  /** 最终透明度 */
+  FINAL_OPACITY: 0,
+} as const;
+
+// ==================== 主组件 ====================
+
+/**
+ * 应用根组件
+ *
+ * 负责：
+ * - 主题管理
+ * - 启动动画
+ * - 全局状态提供
+ */
 export default function App() {
   const { themeMode, setThemeMode, paperTheme, isDark, isReady } =
     useAppTheme();
 
-  const fadeAnim = React.useRef(new Animated.Value(1)).current; // Splash 透明度
-  const scaleAnim = React.useRef(new Animated.Value(0.9)).current; // 图标缩放
+  // 动画状态
+  const fadeAnim = React.useRef(
+    new Animated.Value(ANIMATION_CONFIG.INITIAL_OPACITY),
+  ).current;
+  const scaleAnim = React.useRef(
+    new Animated.Value(ANIMATION_CONFIG.INITIAL_SCALE),
+  ).current;
+
   const [showSplash, setShowSplash] = React.useState(true);
 
   // 控制 Splash 动画
   React.useEffect(() => {
-    if (isReady) {
-      // 开始 logo 缩放动画
-      Animated.sequence([
-        Animated.timing(scaleAnim, {
-          toValue: 1,
-          duration: 500,
-          easing: Easing.out(Easing.ease),
-          useNativeDriver: true,
-        }),
-        Animated.delay(800), // 停留 0.8s 让用户看清
-        Animated.timing(fadeAnim, {
-          toValue: 0,
-          duration: 600,
-          easing: Easing.out(Easing.ease),
-          useNativeDriver: true,
-        }),
-      ]).start(() => setShowSplash(false));
-    }
-  }, [fadeAnim, isReady, scaleAnim]);
+    if (!isReady) return;
+
+    // Logo 缩放 -> 停留 -> 淡出
+    const animation = Animated.sequence([
+      // 1. Logo 缩放动画
+      Animated.timing(scaleAnim, {
+        toValue: ANIMATION_CONFIG.FINAL_SCALE,
+        duration: ANIMATION_CONFIG.SCALE_DURATION,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+      // 2. 停留一段时间
+      Animated.delay(ANIMATION_CONFIG.DELAY_DURATION),
+      // 3. 淡出动画
+      Animated.timing(fadeAnim, {
+        toValue: ANIMATION_CONFIG.FINAL_OPACITY,
+        duration: ANIMATION_CONFIG.FADE_DURATION,
+        easing: Easing.out(Easing.ease),
+        useNativeDriver: true,
+      }),
+    ]);
+
+    animation.start(() => {
+      setShowSplash(false);
+    });
+
+    // 清理函数
+    return () => {
+      animation.stop();
+    };
+  }, [isReady, fadeAnim, scaleAnim]);
+
+  // 优化 ThemeContext value，避免不必要的重渲染
+  const themeContextValue = React.useMemo<ThemeContextValue>(
+    () => ({
+      themeMode,
+      setThemeMode,
+    }),
+    [themeMode, setThemeMode],
+  );
 
   return (
     <SafeAreaProvider>
       <PaperProvider theme={paperTheme}>
         <StatusBar style={isDark ? "light" : "dark"} />
 
-        <ThemeContext.Provider
-          value={{
-            themeMode,
-            setThemeMode,
-          }}
-        >
+        <ThemeContext.Provider value={themeContextValue}>
           <BottomNavigator />
         </ThemeContext.Provider>
 
-        {showSplash && (
-          <Animated.View
-            style={[
-              styles.splashContainer,
-              {
-                backgroundColor: paperTheme.colors.background,
-                opacity: fadeAnim,
-              },
-            ]}
-          >
-            <Animated.View
-              style={{
-                alignItems: "center",
-                transform: [{ scale: scaleAnim }],
-              }}
-            >
-              <Image
-                source={require("@/assets/icon/origin/momentum-256.png")}
-                style={[styles.icon, { tintColor: paperTheme.colors.primary }]}
-                resizeMode="contain"
-              />
-              <Text
-                style={[
-                  styles.appName,
-                  { color: paperTheme.colors.onBackground },
-                ]}
-              >
-                Momentum
-              </Text>
-            </Animated.View>
-            <ActivityIndicator
-              animating
-              size="small"
-              color={paperTheme.colors.primary}
-              style={{ marginTop: 24 }}
-            />
-          </Animated.View>
-        )}
+        <SplashScreen
+          visible={showSplash}
+          fadeAnim={fadeAnim}
+          scaleAnim={scaleAnim}
+          theme={paperTheme}
+        />
       </PaperProvider>
     </SafeAreaProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  splashContainer: {
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 999,
-  },
-  icon: {
-    width: 96,
-    height: 96,
-    marginBottom: 16,
-  },
-  appName: {
-    fontSize: 28,
-    fontWeight: "700",
-    letterSpacing: 0.5,
-  },
-});
